@@ -1,0 +1,2 @@
+# wojny-automatow
+WdPC project
