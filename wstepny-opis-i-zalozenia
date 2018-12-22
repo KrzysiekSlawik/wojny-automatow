@@ -1,0 +1,99 @@
+Wojny Automatów
+1. Czym będą wojny automatów?
+	Wojny automatów mają być grą/symulacją polegającą na rywalizacji pomiędzy
+	dwoma graczami. Ich zadaniem jest przygotować strategię dla swoich
+	maszyn w postaci skryptów napisanych w specjalnie do tego stworzonym języku
+	"programowania" w strukturze podobnym do maszyny ram, ale zawierającym wiele
+	funkcji mających na celu uproszczenie tworzenia skryptów.
+
+2. Jak będzie wyglądałą rozgrywka?
+	Gracz ma do dyspozycji trzy typy jednostek:
+		-zwykły robot (może atakować jednostki wroga)
+		-robot wsparcia (wykonuje akcje szybciej i może zbierać surowce)
+		-baza (umożliwia tworzenie robotów)
+	Celem gracza jest stworzenie strategi, która umożliwi zniszczenie bazy
+	przeciwnika i obronienie własnej. W tym celu roboty gracza muszą gromadzić
+	surowce, które są rozmieszczone w losowych miejscach na mapie, niszczyć
+	jednostki przeciwnika i przede wszystkim robić to szybko i skutecznie.
+	To jak szybko będą działać roboty, zależy od tego, jak dobrze napisana będzie
+	strategia robota. W każdym obejściu pętli symulacji roboty przesuwają swój
+	licznik rozkazów o jedno pole, więc zbędne instrukcje będą spowalniały
+	działanie robotów.
+
+3. Z czego składać będzie się gotowy projekt "Wojny Automatów"?
+	-własny język do tworzenia strategii
+		Podobny do maszyny ram, jednak wyposażony w wysokopoziomowe funkcje
+	-interpreter
+		Przekształca strategię gracza na zrozumiałą dla głównego członu programu
+		postać "tablicy rozkazów"
+	-główny człon programu
+		Umożliwia wczytanie strategii, zmienienie opcji takich jak rozmiar mapy
+		i prędkość symulacji, uruchomienie rozgrywki lokalnie.
+
+4. Jak będzie wyglądać język do tworzenia strategii?
+	Na chwilę obecną ciężko jest to przewidzieć, ale na pewno znajdą się w nim
+	funkcje takie jak:
+		-wczytanie do akumulatora
+			każdy robot posiada dwa akumulatory:
+				-akumulator współrzednych
+				-akumulator liczb całkowitych
+		-zapisanie do pamięci
+			każdy robot posiada kreśloną liczbę komórek pamięci:
+				-połowę na współrzędne
+				-połowę na liczby całkowite
+		-funkcje arytmetyczne
+			-dla współrzędnych
+				-dodanie do akumulatora współrzędnej (x1+x2;y1+y2)
+				-odejmowanie od akumulatora współrzędnej
+				-dodanie do akumulatora liczby całkowitej po x lub y
+				-odejmowanie od akumulatora liczby całkowitej
+		-funkcje porównania zwracające do akumulatora 1 lub 0
+			-zapytanie "akumulator > x"
+			-zapytanie "akumulator = x"
+		-funkcje przypisania wartości
+		-skoki i skoki warunkowe
+			-do nr instrukcji znajdującym się w akumulatorze
+			-skok do ustalonej etykiety warunkowy i bezwarunkowy
+				warunkowy skok opiera się na wartości z akumulatora liczby całkowitych
+		-pojedyncze rozkazy
+			-ruch w wybranym kierunku
+			-atak (tylko zwykły robot)
+			-zebranie surowca (tylko robot wsparcia)
+			-stworzenie jednostki o numerze na podstawie wartości w akumulatorze
+				liczb całkowitych (tylko baza)
+			-zapytanie o liczebność jednostki o numerze na podstawie
+				wartości w akumulatorze liczb całkowitych (tylko baza)
+			-zapytanie o odległość punktu z akumulatora, uwaga wynik zapisany w
+				akumulatorze liczb całkowitych
+			-zapytanie o id jednostki na współrzędnej z akumulatora (0 jeżeli brak)
+			-przekazanie współrzędnych jednostce o id z akumulatora
+		-rozkazy wysokopoziomowe (droższe)
+			-zapytanie o najbliższą widoczną jednostkę przeciwnika
+			-zapytanie o najbliższą jednostkę własną
+			-zapytanie o najbliższy widoczny surowiec
+			-zapytanie o najbliższy nieodkryty obszar
+			-zapytanie o pozycję własnej bazy
+			-przekazanie wszystkim jednostką własnym współrzędnych i liczby z
+				akumulatorów
+			-funkcje trasy
+				-znalezienie trasy
+				-podążanie trasą
+				-wracanie trasą
+				-zapytanie o długość trasy
+				-zapytanie o drożność trasy
+					trasa mogła zostać ustalona przed odkryciem przeszkody
+				-przekazanie trasy tworzonej jednostce (tylko baza)
+
+		Każda linijka zbudowana będzie [etykieta][funkcja][argument] i tłumaczona
+		na trzy tablice. Etykiety przekształcone zostaną na kolejne id, funkcją
+		zostaną przypisane ich wskaźniki, argumentą zostaną przypisane struktury
+		zawierające informacje jakiego typu jest to argument.
+
+5. Czego nauczę się tworząc wojny automatów?
+	-biblioteka gtk
+	-zastosowania wskaźników na funkcje
+	-interpretowania tekstu
+	-prowadzenia projektu z wykorzystaniem git'a
+	-tworzenia projektów z wykorzystaniem MAKE'a
+	-wykorzystania algorytmów wyszukujących trasy
+	-modułowości
