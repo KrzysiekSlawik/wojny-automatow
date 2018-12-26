@@ -21,17 +21,20 @@ char * readWord(FILE *file)//returns NULL if it fails to read word
 {
 	char *str;
 	if((str = malloc(sizeof(char)*MAXLENGTH))==NULL)return NULL;
-	if(fscanf(file, "%s", str)==EOF)return NULL;
+	if(fscanf(file, "%s", str)==EOF)
+	{
+		return NULL;
+	}
 	return str;
 }
 
 int wcl(FILE *file)//counts lines just as wc -l
 {
 	char buff;
-	int lines=1;
+	int lines=0;
 	while((buff=fgetc(file))!=EOF)
 	{
-		if(buff = '\n')lines++;
+		if(buff == '\n')lines++;
 	}
 	fseek(file, 0, SEEK_SET);
 	return lines;
@@ -40,9 +43,10 @@ void readToTab(FILE *file, line tab[])//reads whole file into tab of lines
 {
 	char *buff;
 	int i=0;
+	int k=0;
 	while((buff=readWord(file))!=NULL)
 	{
-		switch(i%3)
+		switch(k%3)
 		{
 			case 0:
 				tab[i].first=buff;
@@ -52,10 +56,10 @@ void readToTab(FILE *file, line tab[])//reads whole file into tab of lines
 				break;
 			case 2:
 				tab[i].third=buff;
+				i++;
 				break;
-
 		}
-		i++;
+		k++;
 	}
 }
 bool compStr(char *str1, char *str2)//compares strings, true if strings are the same
@@ -90,6 +94,10 @@ void tagToId(line tag[], int tabf[], var tabv[], int length)//translates tags in
 void makeScript(char *fileName)//returns structure representing scrips of robot
 {
 	FILE *file = fopen(fileName, "r");
+	if(file==NULL)
+	{
+		printf("blad pliku");
+	}
 	int lines = wcl(file);
 	line *tab= malloc(sizeof(line)*lines);
 	int *first = malloc(sizeof(int)*lines);
@@ -100,8 +108,11 @@ void makeScript(char *fileName)//returns structure representing scrips of robot
 
 	tagToId(tab, first, third, lines);
 
+	printf("%s %s %s\n",tab[0].first, tab[0].second, tab[0].third);
+	printf("%d %d %d\n",first[0], second[0], third[0].vid);
+	printf(",%d,\n", lines);
 }
 int main()
 {
-
+	makeScript("test");
 }
