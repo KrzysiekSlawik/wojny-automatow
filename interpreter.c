@@ -91,6 +91,36 @@ void tagToId(line tag[], int tabf[], var tabv[], int length)//translates tags in
 		}
 	}
 }
+void variableInterpret(line tag[], var tabv[], int length)//translates arguments from string to var structure
+{
+	for(int i=0; i<length; i++)
+	{
+		if(tag[i].third[0]=='=')
+		{
+			tabv[i].isValue = true;
+			tabv[i].vid = atoi(tag[i].third + 1);
+			continue;
+		}
+		if(tag[i].third[0]>='0' && tag[i].third[0]<='9')
+		{
+			tabv[i].isValue = false;
+			tabv[i].vid = atoi(tag[i].third);
+			continue;
+		}
+	}
+}
+void functionInterpret(line tag[], bool *(*tabFunc)(int, char**, bool**, var, int*), int length)//translates functions from string to function pointers
+{
+	for(int i = 0; i < length; i++)
+	{
+		if(compStr(tag[i].second,"func1"))
+		{
+			tabFunc=NULL;//change "func1" with actual func name and NULL with func id
+			continue;
+		}
+		//above segment should be repeated as many times as there is functions in robot.c
+	}
+}
 void makeScript(char *fileName)//returns structure representing scrips of robot
 {
 	FILE *file = fopen(fileName, "r");
@@ -101,16 +131,17 @@ void makeScript(char *fileName)//returns structure representing scrips of robot
 	int lines = wcl(file);
 	line *tab= malloc(sizeof(line)*lines);
 	int *first = malloc(sizeof(int)*lines);
-	int *second = malloc(sizeof(int)*lines);
+	//functions arg0=botId, arg1=map, arg2=visionMask, arg3=addVar, arg4 botTab will get its type later
+	bool *((*second)(int, char**, bool**, var, int*)) = malloc(sizeof(second)*lines);
 	var *third = malloc(sizeof(var)*lines);
 
 	readToTab(file, tab);
 
 	tagToId(tab, first, third, lines);
 
-	printf("%s %s %s\n",tab[0].first, tab[0].second, tab[0].third);
-	printf("%d %d %d\n",first[0], second[0], third[0].vid);
-	printf(",%d,\n", lines);
+	variableInterpret(tab, third, lines);
+
+	functionInterpret(tab, second, lines);
 }
 int main()
 {
