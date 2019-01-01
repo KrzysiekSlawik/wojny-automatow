@@ -1,6 +1,6 @@
 CC=gcc
 CFLAGS=-I.
-DEPS = interpreter.h
+DEPS = interpreter.h robot.h
 OBJ = main.o interpreter.o
 
 %.o: %.c $(DEPS)
