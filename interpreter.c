@@ -1,22 +1,9 @@
+#include "interpreter.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
-#define MAXLENGTH 20//max length of any string representing tag, function name or variable
-
-typedef struct line
-{
-	char *first;//string with tag
-	char *second;//string with name of function
-	char *third;//string with argument of function
-}line;
-
-typedef struct var
-{
-	int vid;//value or id of variable
-	bool isValue;//if true, vis is value - not id of variable
-}var;
-
+#include "interpreter.h"
 char * readWord(FILE *file)//returns NULL if it fails to read word
 {
 	char *str;
@@ -109,19 +96,7 @@ void variableInterpret(line tag[], var tabv[], int length)//translates arguments
 		}
 	}
 }
-void functionInterpret(line tag[], bool *(*tabFunc)(int, char**, bool**, var, int*), int length)//translates functions from string to function pointers
-{
-	for(int i = 0; i < length; i++)
-	{
-		if(compStr(tag[i].second,"func1"))
-		{
-			tabFunc=NULL;//change "func1" with actual func name and NULL with func id
-			continue;
-		}
-		//above segment should be repeated as many times as there is functions in robot.c
-	}
-}
-void makeScript(char *fileName)//returns structure representing scrips of robot
+void makeScript(char *fileName)//returns structure representing scripts of robot
 {
 	FILE *file = fopen(fileName, "r");
 	if(file==NULL)
@@ -131,8 +106,7 @@ void makeScript(char *fileName)//returns structure representing scrips of robot
 	int lines = wcl(file);
 	line *tab= malloc(sizeof(line)*lines);
 	int *first = malloc(sizeof(int)*lines);
-	//functions arg0=botId, arg1=map, arg2=visionMask, arg3=addVar, arg4 botTab will get its type later
-	bool *((*second)(int, char**, bool**, var, int*)) = malloc(sizeof(second)*lines);
+	int *second = malloc(sizeof(int)*lines);
 	var *third = malloc(sizeof(var)*lines);
 
 	readToTab(file, tab);
@@ -141,9 +115,8 @@ void makeScript(char *fileName)//returns structure representing scrips of robot
 
 	variableInterpret(tab, third, lines);
 
-	functionInterpret(tab, second, lines);
-}
-int main()
-{
-	makeScript("test");
+	printf("%s %s %s\n",tab[0].first, tab[0].second, tab[0].third);
+	printf("%d %d %d\n",first[0], second[0], third[0].vid);
+	if(third[0].isValue)printf("is value\n");
+	printf(",%d,\n", lines);
 }
