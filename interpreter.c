@@ -4,6 +4,9 @@
 #include <stdbool.h>
 #include <string.h>
 #include "interpreter.h"
+#include "robot.h"
+#include "commands.h"
+
 char * readWord(FILE *file)//returns NULL if it fails to read word
 {
 	char *str;
