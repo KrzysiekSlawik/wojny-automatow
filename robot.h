@@ -3,10 +3,10 @@
 
 #include <stdbool.h>
 #define ROBOTMEM 10
-typedef point sturct point	{
+typedef struct point	{
 	int x, y;
 }point;
-typedef robot struct robot	{
+typedef struct robot	{
 	int hp;//hit points
 	point pos;//curent possition of robot
 	int taskCount, taskCountBis;//taskCount which instruction should be executed

@@ -6,6 +6,8 @@
 #include "interpreter.h"
 #include "robot.h"
 #include "commands.h"
+#include "map.h"
+
 
 char * readWord(FILE *file)//returns NULL if it fails to read word
 {
@@ -99,7 +101,42 @@ void variableInterpret(line tag[], var tabv[], int length)//translates arguments
 		}
 	}
 }
-void makeScript(char *fileName)//returns structure representing scripts of robot
+void functionInterpret(line tag[], void (**funcPtr)(robot*, var, map*, robot**), int length)
+{
+	char *functions[15];
+	//list of commands from commands.h
+	functions[0] = "loadI";
+	functions[1] = "saveI";
+	functions[2] = "loadX";
+	functions[3] = "loadY";
+	functions[4] = "loadC";
+	functions[5] = "saveC";
+	functions[6] = "add";
+	functions[7] = "sub";
+	functions[8] = "addX";
+	functions[9] = "subX";
+	functions[10] = "addY";
+	functions[11] = "subY";
+	functions[12] = "greater";
+	functions[13] = "equal";
+	functions[14] = "jump";
+	void (*listfuncPtr[15])(robot*, var, map*, robot**)={loadIC, saveIC, loadXC,
+		loadYC, loadCC, saveCC, addC, subC, addXC, subXC, addYC, subYC, greaterC,
+		equalC, jumpC};
+
+
+	for(int i=0; i<length; i++)
+	{
+		int j=0;
+		while(!compStr(functions[j], tag[i].second))
+		{
+			j++;
+		}
+		funcPtr[i]=listfuncPtr[j];
+	}
+}
+
+script *makeScript(char *fileName)//returns structure representing scripts of robot
 {
 	FILE *file = fopen(fileName, "r");
 	if(file==NULL)
@@ -109,7 +146,7 @@ void makeScript(char *fileName)//returns structure representing scripts of robot
 	int lines = wcl(file);
 	line *tab= malloc(sizeof(line)*lines);
 	int *first = malloc(sizeof(int)*lines);
-	int *second = malloc(sizeof(int)*lines);
+	void (**funcPtr)(robot*, var, map*, robot**) = malloc(sizeof(void(robot*, var, map*, robot**))*lines);
 	var *third = malloc(sizeof(var)*lines);
 
 	readToTab(file, tab);
@@ -118,8 +155,10 @@ void makeScript(char *fileName)//returns structure representing scripts of robot
 
 	variableInterpret(tab, third, lines);
 
-	printf("%s %s %s\n",tab[0].first, tab[0].second, tab[0].third);
-	printf("%d %d %d\n",first[0], second[0], third[0].vid);
-	if(third[0].isValue)printf("is value\n");
-	printf(",%d,\n", lines);
+	functionInterpret(tab, funcPtr, lines);
+
+	script *new=malloc(sizeof(script));
+	new->funcPtr=funcPtr;
+	new->variable=third;
+	return new;
 }

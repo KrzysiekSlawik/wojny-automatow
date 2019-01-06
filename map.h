@@ -4,7 +4,7 @@
 #define MAPSIZE 100
 
 #include <stdbool.h>
-typedef map struct map
+typedef struct map
 {
 	/*	-3 - obstacle
 		-2 - gold mine

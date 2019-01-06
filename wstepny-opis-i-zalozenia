@@ -38,7 +38,7 @@ Wojny Automatów
 				-akumulator współrzednych
 				-akumulator liczb całkowitych
 		-zapisanie do pamięci
-			każdy robot posiada kreśloną liczbę komórek pamięci:
+			każdy robot posiada określoną liczbę komórek pamięci:
 				-połowę na współrzędne
 				-połowę na liczby całkowite
 		-funkcje arytmetyczne
@@ -50,8 +50,8 @@ Wojny Automatów
 		-funkcje porównania zwracające do akumulatora 1 lub 0
 			-zapytanie "akumulator > x"
 			-zapytanie "akumulator = x"
-		-funkcje przypisania wartości
-		-skoki i skoki warunkowe
+		-funkcje przypisania wartości//!POKRYTE PRZEZ WCZYTANIE I ZAPISANIE
+		-skoki i skoki warunkowe//!TYLKO ZWYKŁY SKOK wykonany gdy akumulator !=0
 			-do nr instrukcji znajdującym się w akumulatorze
 			-skok do ustalonej etykiety warunkowy i bezwarunkowy
 				warunkowy skok opiera się na wartości z akumulatora liczby całkowitych

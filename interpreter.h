@@ -3,6 +3,8 @@
 	#define MAXLENGTH 20//max length of any string representing tag, function name or variable
 	#include <stdbool.h>
 	#include <stdio.h>
+	#include "map.h"
+	#include "robot.h"
 	typedef struct var
 	{
 		int vid;//value or id of variable
@@ -16,6 +18,12 @@
 		char *third;//string with argument of function
 	}line;
 
+	typedef struct script
+	{
+		void (**funcPtr)(robot*, var, map*, robot**);
+		var *variable;
+	}script;
+
 	char * readWord(FILE*);//returns NULL if it fails to read word
 
 	int wcl(FILE*);//counts lines just as wc -l
@@ -28,5 +36,7 @@
 
 	void variableInterpret(line*, var*, int);//translates arguments from string to var structure
 
-	void makeScript(char*);//returns structure representing scripts of robot
+	void functionInterpret(line*, void (**funcPtr)(robot*, var, map*, robot**), int);
+
+	script *makeScript(char*);//returns structure representing scripts of robot
 #endif
