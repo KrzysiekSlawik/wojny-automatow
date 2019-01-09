@@ -11,8 +11,7 @@ typedef struct map
 		-1 -nothing
 		0-1000 - units*/
 	int whole[MAPSIZE][MAPSIZE];
-	bool visionRed[MAPSIZE][MAPSIZE];
-	bool visionGreen[MAPSIZE][MAPSIZE];
+	bool vision[2][MAPSIZE][MAPSIZE];
 }map;
 
 #endif

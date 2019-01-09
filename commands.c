@@ -1,5 +1,4 @@
 #include "commands.h"
-
 void loadIC(robot *bot, var variable, map *map, robot *tab[1000])
 {
 	if(variable.isValue)
@@ -176,4 +175,84 @@ void jumpC(robot *bot, var variable, map *map, robot *tab[1000])
 			bot->taskCount = bot->integerMem[variable.vid];
 		}
 	}
+}
+void moveC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void attackC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void gatherC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void produceC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void howManyUnitsC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void distanceC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void whatIsC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void tellC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void nearestEnemyC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void nearestFriendC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void nearestResourceC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void nearestShadowC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void myBaseC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void yellC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void findPathC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void forwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void backwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void lengthPathC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void unobstructedPathC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
+}
+void produceWithPathC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	//work in progress
 }

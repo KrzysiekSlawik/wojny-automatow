@@ -15,6 +15,7 @@ char * readWord(FILE *file)//returns NULL if it fails to read word
 	if((str = malloc(sizeof(char)*MAXLENGTH))==NULL)return NULL;
 	if(fscanf(file, "%s", str)==EOF)
 	{
+		free(str);
 		return NULL;
 	}
 	return str;
@@ -103,7 +104,7 @@ void variableInterpret(line tag[], var tabv[], int length)//translates arguments
 }
 void functionInterpret(line tag[], void (**funcPtr)(robot*, var, map*, robot**), int length)
 {
-	char *functions[15];
+	char *functions[35];
 	//list of commands from commands.h
 	functions[0] = "loadI";
 	functions[1] = "saveI";
@@ -120,9 +121,33 @@ void functionInterpret(line tag[], void (**funcPtr)(robot*, var, map*, robot**),
 	functions[12] = "greater";
 	functions[13] = "equal";
 	functions[14] = "jump";
-	void (*listfuncPtr[15])(robot*, var, map*, robot**)={loadIC, saveIC, loadXC,
+	functions[15] = "move";
+	functions[16] = "attack";
+	functions[17] = "gather";
+	functions[18] = "produce";
+	functions[19] = "howManyUnits";
+	functions[20] = "distance";
+	functions[21] = "whatIs";
+	functions[22] = "tell";
+	functions[23] = "nearestEnemy";
+	functions[24] = "nearestFriendC";
+	functions[25] = "nearestResource";
+	functions[26] = "nearestShadow";
+	functions[27] = "myBase";
+	functions[28] = "yell";
+	functions[25] = "findPath";
+	functions[30] = "forwardPath";
+	functions[31] = "backwardPath";
+	functions[32] = "lengthPath";
+	functions[33] = "forwardunobstructedPath";
+	functions[34] = "produceWithPath";
+
+	void (*listfuncPtr[35])(robot*, var, map*, robot**)={loadIC, saveIC, loadXC,
 		loadYC, loadCC, saveCC, addC, subC, addXC, subXC, addYC, subYC, greaterC,
-		equalC, jumpC};
+		equalC, jumpC, moveC, attackC, gatherC, produceC, howManyUnitsC, distanceC,
+		whatIsC, tellC, nearestEnemyC, nearestFriendC, nearestResourceC, nearestShadowC,
+		myBaseC, yellC, findPathC, forwardPathC, backwardPathC, lengthPathC,
+		unobstructedPathC, produceWithPathC};
 
 
 	for(int i=0; i<length; i++)
@@ -141,7 +166,7 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 	FILE *file = fopen(fileName, "r");
 	if(file==NULL)
 	{
-		printf("blad pliku");
+		return NULL;
 	}
 	int lines = wcl(file);
 	line *tab= malloc(sizeof(line)*lines);
@@ -160,5 +185,15 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 	script *new=malloc(sizeof(script));
 	new->funcPtr=funcPtr;
 	new->variable=third;
+	//freeing memory
+	for(int i=0; i<lines; i++)
+	{
+		free(tab[i].first);
+		free(tab[i].second);
+		free(tab[i].third);
+	}
+	free(tab);
+	free(first);
+	fclose(file);
 	return new;
 }
