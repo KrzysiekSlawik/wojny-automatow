@@ -36,7 +36,7 @@
 
 	void variableInterpret(line*, var*, int);//translates arguments from string to var structure
 
-	void functionInterpret(line*, void (**funcPtr)(robot*, var, map*, robot**), int);
+	void functionInterpret(void (*listfuncPtr[])(robot*, var, map*, robot**), char**, line*, void (**funcPtr)(robot*, var, map*, robot**), int);
 
 	script *makeScript(char*);//returns structure representing scripts of robot
 #endif

@@ -10,7 +10,7 @@ typedef struct robot	{
 	int hp;//hit points
 	point pos;//curent possition of robot
 	int taskCount, taskCountBis;//taskCount which instruction should be executed
-	bool isAlive, isRed, isGreen, isSupp, isBase;//isColour to get nation of robot
+	bool isAlive, isRed, isSupp, isBase;//isRed to get nation of robot
 	point coordAku;//akumulator for coordinates
 	int integerAku;//akumulator for integer values
 	point coordMem[ROBOTMEM];

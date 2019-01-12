@@ -102,7 +102,20 @@ void variableInterpret(line tag[], var tabv[], int length)//translates arguments
 		}
 	}
 }
-void functionInterpret(line tag[], void (**funcPtr)(robot*, var, map*, robot**), int length)
+void functionInterpret(void (*listfuncPtr[])(robot*, var, map*, robot**), char **functions, line tag[], void (**funcPtr)(robot*, var, map*, robot**), int length)
+{
+	for(int i=0; i<length; i++)
+	{
+		int j=0;
+		while(!compStr(functions[j], tag[i].second))
+		{
+			j++;
+		}
+		funcPtr[i]=listfuncPtr[j];
+	}
+}
+
+script *makeScript(char *fileName)//returns structure representing scripts of robot
 {
 	char *functions[35];
 	//list of commands from commands.h
@@ -135,7 +148,7 @@ void functionInterpret(line tag[], void (**funcPtr)(robot*, var, map*, robot**),
 	functions[26] = "nearestShadow";
 	functions[27] = "myBase";
 	functions[28] = "yell";
-	functions[25] = "findPath";
+	functions[29] = "findPath";
 	functions[30] = "forwardPath";
 	functions[31] = "backwardPath";
 	functions[32] = "lengthPath";
@@ -149,20 +162,6 @@ void functionInterpret(line tag[], void (**funcPtr)(robot*, var, map*, robot**),
 		myBaseC, yellC, findPathC, forwardPathC, backwardPathC, lengthPathC,
 		unobstructedPathC, produceWithPathC};
 
-
-	for(int i=0; i<length; i++)
-	{
-		int j=0;
-		while(!compStr(functions[j], tag[i].second))
-		{
-			j++;
-		}
-		funcPtr[i]=listfuncPtr[j];
-	}
-}
-
-script *makeScript(char *fileName)//returns structure representing scripts of robot
-{
 	FILE *file = fopen(fileName, "r");
 	if(file==NULL)
 	{
@@ -180,7 +179,7 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 
 	variableInterpret(tab, third, lines);
 
-	functionInterpret(tab, funcPtr, lines);
+	functionInterpret(listfuncPtr, functions, tab, funcPtr, lines);
 
 	script *new=malloc(sizeof(script));
 	new->funcPtr=funcPtr;
