@@ -65,8 +65,13 @@ Wojny Automatów
 				wartości w akumulatorze liczb całkowitych (tylko baza)
 			-zapytanie o odległość punktu z akumulatora, uwaga wynik zapisany w
 				akumulatorze liczb całkowitych
-			-zapytanie o id jednostki na współrzędnej z akumulatora (0 jeżeli brak)
-			-przekazanie współrzędnych jednostce o id z akumulatora
+			-zapytanie o id jednostki na współrzędnej z akumulatora
+				-4 - przeciwnik
+				-3 - przeszkoda
+				-2 - surowiec
+				-1 - nic
+				pozostałe id jednostki
+			-przekazanie współrzędnych z akumulatora jednostce o id z akumulatora oraz wartości ze zmiennej
 		-rozkazy wysokopoziomowe (droższe)
 			-zapytanie o najbliższą widoczną jednostkę przeciwnika
 			-zapytanie o najbliższą jednostkę własną

@@ -18,7 +18,7 @@ map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar)
 	int randV;
 	for(int x = 0; x < sizeX; x++)
 	{
-		for(int y = 0; y < sizeY; y++)
+		for(int y = 0; y < sizeY/2; y++)
 		{
 			randV = rand()%noisePar - 1;
 			if(randV<0)
@@ -29,26 +29,35 @@ map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar)
 			map->whole[x][y] = randV;
 		}
 	}
+	int xVec;
+	int yVec;
 	for(int i = 0; i < limitPar; i++)
 	{
 		for(int x = 0; x < sizeX; x++)
 		{
-			for(int y = 0; y < sizeY; y++)
+			for(int y = 0; y < sizeY/2; y++)
 			{
 				if(map->whole[x][y]==-3)
 				{
-					int xVec = rand()%3 - 1;
-					int yVec = rand()%3 - 1;
-					if(x+xVec<sizeX && y+yVec<sizeY && x+xVec>=sizeX && y+yVec>=sizeY )
+					xVec = rand()%3 - 1;
+					yVec = rand()%3 - 1;
+					if(x+xVec<sizeX && y+yVec<sizeY/2 && x+xVec>=0 && y+yVec>=0 )
 					{
 						map->whole[x+xVec][y+yVec] = -3;
+						randV = rand()%5;
+						if(randV!=1)randV=0;
+						map->whole[x+xVec][y+yVec] += randV;
 					}
-					randV = rand()%5;
-					if(randV!=1)randV=0;
-					map->whole[x+xVec][y+yVec] += randV;
 				}
 			}
 		}
 	}
-
+	for(int x = 0; x < sizeX; x++)
+	{
+		for(int y = 0; y < sizeY/2; y++)
+		{
+			map->whole[x][sizeY-1-y]=map->whole[x][y];
+		}
+	}
+	return map;
 }

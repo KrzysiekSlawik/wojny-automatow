@@ -371,10 +371,12 @@ void gatherC(robot *bot, var variable, map *map, robot *tab[1000])
 		bot->isAlive = false;
 		return;
 	}
+	int distance = sqrt(pow(bot->coordAku.x-bot->pos.x,2)+pow(bot->coordAku.y-bot->pos.y,2));
+	if(distance>3)return;
 	if(map->whole[bot->coordAku.x][bot->coordAku.y]==-2)
 	{
 		map->whole[bot->coordAku.x][bot->coordAku.y]=rand()%2 - 2;
-		map->resources[(int)bot->isRed];
+		map->resources[(int)bot->isRed]++;
 	}
 
 }
@@ -384,19 +386,60 @@ void produceC(robot *bot, var variable, map *map, robot *tab[1000])
 }
 void howManyUnitsC(robot *bot, var variable, map *map, robot *tab[1000])
 {
-	//work in progress
+	int toReturn = 0;
+	if(!bot->isBase)
+	{
+		bot->isAlive = false;
+		return;
+	}
+	for(int i=0; i<1000; i++)
+	{
+		if(bot->isRed == tab[i]->isRed)
+		{
+			if(tab[i]->stratId==bot->integerAku)
+			{
+				toReturn++;
+			}
+		}
+	}
+	bot->integerAku = toReturn;
 }
 void distanceC(robot *bot, var variable, map *map, robot *tab[1000])
 {
-	//work in progress
+	int distance = sqrt(pow(bot->coordAku.x-bot->pos.x,2)+pow(bot->coordAku.y-bot->pos.y,2));
+	bot->integerAku = distance;
 }
 void whatIsC(robot *bot, var variable, map *map, robot *tab[1000])
 {
-	//work in progress
+	if(bot->coordAku.x < 0 && bot->coordAku.x >= map->sizeX)
+	{
+		bot->isAlive = false;
+		return;
+	}
+	if(bot->coordAku.y < 0 && bot->coordAku.y >= map->sizeY)
+	{
+		bot->isAlive = false;
+		return;
+	}
+	int ID = map->whole[bot->coordAku.x][bot->coordAku.y];
+	if(ID>=0)
+	{
+		if(bot->isRed == tab[ID]->isRed)
+		{
+			bot->integerAku = ID;
+			return;
+		}
+		else
+		{
+			bot->integerAku = -4;
+			return;
+		}
+	}
+	else bot->integerAku = ID;
 }
 void tellC(robot *bot, var variable, map *map, robot *tab[1000])
 {
-	//work in progress
+
 }
 void nearestEnemyC(robot *bot, var variable, map *map, robot *tab[1000])
 {
