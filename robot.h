@@ -16,13 +16,8 @@ typedef struct robot	{
 	point coordMem[ROBOTMEM];
 	int integerMem[ROBOTMEM];//memory of robot
 	int stratId;//id of strategy script
-	/*	0 1 2
-		7 + 3
-		6 5 4
-		directions
-
-		8 - path guard - end of path*/
-	char path[1000];
+	point *path;
+	int pathLength;
 	int pathPos;
 }robot;
 
