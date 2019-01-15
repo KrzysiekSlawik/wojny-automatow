@@ -20,8 +20,9 @@
 
 	typedef struct script
 	{
-		void (**funcPtr)(robot*, var, map*, robot**);
+		bool (**funcPtr)(robot*, var, map*, robot**);
 		var *variable;
+		int length;
 	}script;
 
 	char * readWord(FILE*);//returns NULL if it fails to read word
@@ -36,7 +37,11 @@
 
 	void variableInterpret(line*, var*, int);//translates arguments from string to var structure
 
-	void functionInterpret(void (*listfuncPtr[])(robot*, var, map*, robot**), char**, line*, void (**funcPtr)(robot*, var, map*, robot**), int);
+	void functionInterpret(bool (*listfuncPtr[])(robot*, var, map*, robot**), char**, line*, bool (**funcPtr)(robot*, var, map*, robot**), int);
 
 	script *makeScript(char*);//returns structure representing scripts of robot
+
+	void freeScript(script*);//deallocation
+
+	int tickRobots(script*, robot**,  map*);//script *book[2][]
 #endif

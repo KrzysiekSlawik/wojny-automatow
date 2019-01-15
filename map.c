@@ -8,6 +8,8 @@ map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar)
 	map->whole = malloc(sizeof(int*)*sizeX);
 	map->vision[0] = malloc(sizeof(bool*)*sizeX);
 	map->vision[1] = malloc(sizeof(bool*)*sizeX);
+	map->sizeX = sizeX;
+	map->sizeY = sizeY;
 	for(int i = 0; i < sizeX; i++)
 	{
 		map->vision[0][i] = malloc(sizeof(bool)*sizeY);

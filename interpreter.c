@@ -102,7 +102,7 @@ void variableInterpret(line tag[], var tabv[], int length)//translates arguments
 		}
 	}
 }
-void functionInterpret(void (*listfuncPtr[])(robot*, var, map*, robot**), char **functions, line tag[], void (**funcPtr)(robot*, var, map*, robot**), int length)
+void functionInterpret(bool (*listfuncPtr[])(robot*, var, map*, robot**), char **functions, line tag[], bool (**funcPtr)(robot*, var, map*, robot**), int length)
 {
 	for(int i=0; i<length; i++)
 	{
@@ -155,7 +155,7 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 	functions[33] = "forwardunobstructedPath";
 	functions[34] = "produceWithPath";
 
-	void (*listfuncPtr[35])(robot*, var, map*, robot**)={loadIC, saveIC, loadXC,
+	bool (*listfuncPtr[35])(robot*, var, map*, robot**)={loadIC, saveIC, loadXC,
 		loadYC, loadCC, saveCC, addC, subC, addXC, subXC, addYC, subYC, greaterC,
 		equalC, jumpC, moveC, attackC, gatherC, produceC, howManyUnitsC, distanceC,
 		whatIsC, tellC, nearestEnemyC, nearestFriendC, nearestResourceC, nearestShadowC,
@@ -170,7 +170,7 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 	int lines = wcl(file);
 	line *tab= malloc(sizeof(line)*lines);
 	int *first = malloc(sizeof(int)*lines);
-	void (**funcPtr)(robot*, var, map*, robot**) = malloc(sizeof(void(robot*, var, map*, robot**))*lines);
+	bool (**funcPtr)(robot*, var, map*, robot**) = malloc(sizeof(bool(robot*, var, map*, robot**))*lines);
 	var *third = malloc(sizeof(var)*lines);
 
 	readToTab(file, tab);
@@ -184,6 +184,7 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 	script *new=malloc(sizeof(script));
 	new->funcPtr=funcPtr;
 	new->variable=third;
+	new->length = lines;
 	//freeing memory
 	for(int i=0; i<lines; i++)
 	{
@@ -195,4 +196,31 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 	free(first);
 	fclose(file);
 	return new;
+}
+void freeScript(script *scr)
+{
+	for(int i = 0; i<scr->length; i++)
+	{
+
+		free(scr->funcPtr[i]);
+	}
+	free(scr->variable);
+	free(scr);
+}
+int tickRobots(script *book, robot *tab[1000],  map *map)
+{
+	for(int i = 0; i < 1000; i++)
+	{
+		if(tab[i]->isAlive)
+		{
+			if(book->funcPtr[tab[i]->taskCount]
+				(tab[i], book->variable[tab[i]->taskCount], map, tab))
+			{
+				if(tab[i]->taskCount<book->length)
+				{
+					tab[i]->taskCount++;
+				}
+			}
+		}
+	}
 }

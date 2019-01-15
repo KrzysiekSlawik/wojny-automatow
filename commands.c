@@ -1,8 +1,23 @@
 #include "commands.h"
 #include <math.h>
 #include <stdlib.h>
-void loadIC(robot *bot, var variable, map *map, robot *tab[1000])
+#include <stdbool.h>
+bool actionLength(robot *bot, int length)
 {
+	if(bot->taskCountBis>=length-1)
+	{
+		bot->taskCountBis = 0;
+		return true;
+	}
+	else
+	{
+		bot->taskCountBis++;
+		return false;
+	}
+}
+bool loadIC(robot *bot, var variable, map *map, robot *tab[1000])
+{
+	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
 		bot->integerAku = variable.vid;
@@ -12,22 +27,26 @@ void loadIC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		bot->integerAku = bot->integerMem[variable.vid];
 	}
+	return true;
 }
-void saveIC(robot *bot, var variable, map *map, robot *tab[1000])
+bool saveIC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	bot->integerMem[variable.vid] = bot->integerAku;
+	return true;
 }
-void loadXC(robot *bot, var variable, map *map, robot *tab[1000])
+bool loadXC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
 		bot->coordAku.x = variable.vid;
@@ -37,13 +56,15 @@ void loadXC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		bot->coordAku.x = bot->integerMem[variable.vid];
 	}
+	return true;
 }
-void loadYC(robot *bot, var variable, map *map, robot *tab[1000])
+bool loadYC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
 		bot->coordAku.y = variable.vid;
@@ -53,33 +74,39 @@ void loadYC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		bot->coordAku.y = bot->integerMem[variable.vid];
 	}
+	return true;
 }
-void loadCC(robot *bot, var variable, map *map, robot *tab[1000])
+bool loadCC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	bot->coordAku.x = bot->coordMem[variable.vid].x;
 	bot->coordAku.y = bot->coordMem[variable.vid].y;
+	return true;
 }
-void saveCC(robot *bot, var variable, map *map, robot *tab[1000])
+bool saveCC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	bot->coordMem[variable.vid].x = bot->coordAku.x;
 	bot->coordMem[variable.vid].y = bot->coordAku.y;
+	return true;
 }
-void addC(robot *bot, var variable, map *map, robot *tab[1000])
+bool addC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
 		bot->integerAku += variable.vid;
@@ -89,13 +116,15 @@ void addC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		bot->integerAku += bot->integerMem[variable.vid];
 	}
+	return true;
 }
-void subC(robot *bot, var variable, map *map, robot *tab[1000])
+bool subC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
 		bot->integerAku -= variable.vid;
@@ -105,13 +134,15 @@ void subC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		bot->integerAku -= bot->integerMem[variable.vid];
 	}
+	return true;
 }
-void addXC(robot *bot, var variable, map *map, robot *tab[1000])
+bool addXC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
 		bot->coordAku.x += variable.vid;
@@ -121,13 +152,15 @@ void addXC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		bot->coordAku.x += bot->integerMem[variable.vid];
 	}
+	return true;
 }
-void subXC(robot *bot, var variable, map *map, robot *tab[1000])
+bool subXC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
 		bot->coordAku.x -= variable.vid;
@@ -137,13 +170,15 @@ void subXC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		bot->coordAku.x -= bot->integerMem[variable.vid];
 	}
+	return true;
 }
-void addYC(robot *bot, var variable, map *map, robot *tab[1000])
+bool addYC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
 		bot->coordAku.y += variable.vid;
@@ -153,13 +188,15 @@ void addYC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		bot->coordAku.y += bot->integerMem[variable.vid];
 	}
+	return true;
 }
-void subYC(robot *bot, var variable, map *map, robot *tab[1000])
+bool subYC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
 		bot->coordAku.y -= variable.vid;
@@ -169,13 +206,15 @@ void subYC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		bot->coordAku.y -= bot->integerMem[variable.vid];
 	}
+	return true;
 }
-void greaterC(robot *bot, var variable, map *map, robot *tab[1000])
+bool greaterC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
 		if(bot->integerAku > variable.vid)
@@ -192,7 +231,7 @@ void greaterC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		if(bot->integerAku > bot->integerMem[variable.vid])
 		{
@@ -203,9 +242,11 @@ void greaterC(robot *bot, var variable, map *map, robot *tab[1000])
 			bot->integerAku = 0;
 		}
 	}
+	return true;
 }
-void equalC(robot *bot, var variable, map *map, robot *tab[1000])
+bool equalC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
 		if(bot->integerAku == variable.vid)
@@ -222,7 +263,7 @@ void equalC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		if(bot->integerAku == bot->integerMem[variable.vid])
 		{
@@ -233,25 +274,34 @@ void equalC(robot *bot, var variable, map *map, robot *tab[1000])
 			bot->integerAku = 0;
 		}
 	}
+	return true;
 }
-void jumpC(robot *bot, var variable, map *map, robot *tab[1000])
+bool jumpC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
-		bot->taskCount = variable.vid;
+		bot->taskCount = variable.vid-1;
 	}
 	else
 	{
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
-		bot->taskCount = bot->integerMem[variable.vid];
+		bot->taskCount = bot->integerMem[variable.vid]-1;
 	}
+	return true;
 }
-void moveC(robot *bot, var variable, map *map, robot *tab[1000])
+bool moveC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
+	if(bot->isBase)
+	{
+		bot->isAlive = false;
+		return false;
+	}
 	int directionValue, xVec=0, yVec=0;
 	if(variable.isValue)directionValue = variable.vid;
 	else
@@ -259,7 +309,7 @@ void moveC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		directionValue = bot -> integerMem[variable.vid];
 	}
@@ -301,38 +351,47 @@ void moveC(robot *bot, var variable, map *map, robot *tab[1000])
 	point newPos;
 	newPos.x = bot -> pos.x + xVec;
 	newPos.y = bot -> pos.y + yVec;
-	if(newPos.x < 0 && newPos.x >= map->sizeX)
+	if(newPos.x < 0 || newPos.x >= map->sizeX)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
-	if(newPos.y < 0 && newPos.y >= map->sizeY)
+	if(newPos.y < 0 || newPos.y >= map->sizeY)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	if(map->whole[newPos.x][newPos.y]==-1)
 	{
+		map->whole[newPos.x][newPos.y] = map->whole[bot->pos.x][bot->pos.y];
+		map->whole[bot->pos.x][bot->pos.y] = -1;
 		bot -> pos = newPos;
+		printf(" ye ");
 	}
+	return true;
 }
-void attackC(robot *bot, var variable, map *map, robot *tab[1000])
+bool attackC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
+	if(!bot->isBase && !bot->isSupp && !bot->isWar)
+	{
+		bot->isWar = true;
+	}
 	int id;
-	if(bot->isBase || bot->isSupp)
+	if(!bot->isWar)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	if(bot->coordAku.x < 0 || bot->coordAku.x >= map->sizeX)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	if(bot->coordAku.y < 0 || bot->coordAku.y >= map->sizeY)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	if((id=map->whole[bot->coordAku.x][bot->coordAku.y])>=0)
 	{
@@ -350,36 +409,48 @@ void attackC(robot *bot, var variable, map *map, robot *tab[1000])
 			}
 		}
 	}
+	return true;
 }
-void gatherC(robot *bot, var variable, map *map, robot *tab[1000])
+bool gatherC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
+	if(!bot->isBase && !bot->isSupp && !bot->isWar)
+	{
+		bot->isSupp = true;
+	}
 	if(!bot->isSupp)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	if(bot->coordAku.x < 0 || bot->coordAku.x >= map->sizeX)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	if(bot->coordAku.y < 0 || bot->coordAku.y >= map->sizeY)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	int distance = sqrt(pow(bot->coordAku.x-bot->pos.x,2)+pow(bot->coordAku.y-bot->pos.y,2));
-	if(distance>3)return;
+	if(distance>3)return false;
 	if(map->whole[bot->coordAku.x][bot->coordAku.y]==-2)
 	{
 		map->whole[bot->coordAku.x][bot->coordAku.y]=rand()%2 - 2;
 		map->resources[(int)bot->isRed]++;
 	}
-
+	return true;
 }
-void produceC(robot *bot, var variable, map *map, robot *tab[1000])
+bool produceC(robot *bot, var variable, map *map, robot *tab[1000])
 {
-	if(map->resources[(int)bot->isRed]<10)return;
+	if(!actionLength(bot, 1))return false;
+	if(!bot->isBase)
+	{
+		bot->isAlive = false;
+		return false;
+	}
+	if(map->resources[(int)bot->isRed]<10)return false;
 	int idS;
 	if(variable.isValue)
 	{
@@ -390,14 +461,14 @@ void produceC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		idS = bot->integerMem[variable.vid];
 	}
 	if(idS <= 0)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	int idT;
 	for(idT = 0; idT<1000; idT++)
@@ -446,7 +517,7 @@ void produceC(robot *bot, var variable, map *map, robot *tab[1000])
 	}
 	else
 	{
-		return;
+		return false;
 	}
 	tab[idT]->hp = 2;
 	tab[idT]->isAlive = true;
@@ -467,14 +538,16 @@ void produceC(robot *bot, var variable, map *map, robot *tab[1000])
 		tab[idT]->integerMem[i] = 0;
 	}
 	map->resources[(int)bot->isRed]-=10;
+	return true;
 }
-void howManyUnitsC(robot *bot, var variable, map *map, robot *tab[1000])
+bool howManyUnitsC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	int toReturn = 0;
 	if(!bot->isBase)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	for(int i=0; i<1000; i++)
 	{
@@ -487,23 +560,27 @@ void howManyUnitsC(robot *bot, var variable, map *map, robot *tab[1000])
 		}
 	}
 	bot->integerAku = toReturn;
+	return true;
 }
-void distanceC(robot *bot, var variable, map *map, robot *tab[1000])
+bool distanceC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	int distance = sqrt(pow(bot->coordAku.x-bot->pos.x,2)+pow(bot->coordAku.y-bot->pos.y,2));
 	bot->integerAku = distance;
+	return true;
 }
-void whatIsC(robot *bot, var variable, map *map, robot *tab[1000])
+bool whatIsC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	if(bot->coordAku.x < 0 || bot->coordAku.x >= map->sizeX)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	if(bot->coordAku.y < 0 || bot->coordAku.y >= map->sizeY)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	int ID = map->whole[bot->coordAku.x][bot->coordAku.y];
 	if(ID>=0)
@@ -511,18 +588,20 @@ void whatIsC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(bot->isRed == tab[ID]->isRed)
 		{
 			bot->integerAku = ID;
-			return;
+			return true;
 		}
 		else
 		{
 			bot->integerAku = -4;
-			return;
+			return true;
 		}
 	}
 	else bot->integerAku = ID;
+	return true;
 }
-void tellC(robot *bot, var variable, map *map, robot *tab[1000])
+bool tellC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	int toIntegerAku;
 	if(variable.isValue)
 	{
@@ -533,20 +612,22 @@ void tellC(robot *bot, var variable, map *map, robot *tab[1000])
 		if(variable.vid < 0 || variable.vid >= ROBOTMEM)
 		{
 			bot->isAlive = false;
-			return;
+			return false;
 		}
 		toIntegerAku = bot->integerMem[variable.vid];
 	}
 	if(bot->integerAku < 0 || bot->integerAku >= 1000)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	tab[bot->integerAku]->coordAku = bot->coordAku;
 	tab[bot->integerAku]->integerAku = toIntegerAku;
+	return true;
 }
-void nearestEnemyC(robot *bot, var variable, map *map, robot *tab[1000])
+bool nearestEnemyC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	for(int i = 1; i+bot->pos.x < map->sizeX || bot->pos.x - i >= 0 || i+bot->pos.y < map->sizeY || bot->pos.y - i >= 0; i++)
 	{
 		if(bot->pos.y+i<map->sizeY)
@@ -563,7 +644,7 @@ void nearestEnemyC(robot *bot, var variable, map *map, robot *tab[1000])
 							{
 								bot->coordAku.x = bot->pos.x - i + j;
 								bot->coordAku.y = bot->pos.y + i;
-								return;
+								return true;
 							}
 						}
 					}
@@ -584,7 +665,7 @@ void nearestEnemyC(robot *bot, var variable, map *map, robot *tab[1000])
 							{
 								bot->coordAku.x = bot->pos.x + i;
 								bot->coordAku.y = bot->pos.y + i - j;
-								return;
+								return true;
 							}
 						}
 					}
@@ -605,7 +686,7 @@ void nearestEnemyC(robot *bot, var variable, map *map, robot *tab[1000])
 							{
 								bot->coordAku.x = bot->pos.x + i - j;
 								bot->coordAku.y = bot->pos.y - i;
-								return;
+								return true;
 							}
 						}
 					}
@@ -626,7 +707,7 @@ void nearestEnemyC(robot *bot, var variable, map *map, robot *tab[1000])
 							{
 								bot->coordAku.x = bot->pos.x - i;
 								bot->coordAku.y = bot->pos.y - i + j;
-								return;
+								return true;
 							}
 						}
 					}
@@ -634,9 +715,11 @@ void nearestEnemyC(robot *bot, var variable, map *map, robot *tab[1000])
 			}
 		}
 	}
+	return true;
 }
-void nearestFriendC(robot *bot, var variable, map *map, robot *tab[1000])
+bool nearestFriendC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	for(int i = 1; i+bot->pos.x < map->sizeX || bot->pos.x - i >= 0 || i+bot->pos.y < map->sizeY || bot->pos.y - i >= 0; i++)
 	{
 		if(bot->pos.y+i<map->sizeY)
@@ -653,7 +736,7 @@ void nearestFriendC(robot *bot, var variable, map *map, robot *tab[1000])
 							{
 								bot->coordAku.x = bot->pos.x - i + j;
 								bot->coordAku.y = bot->pos.y + i;
-								return;
+								return true;
 							}
 						}
 					}
@@ -674,7 +757,7 @@ void nearestFriendC(robot *bot, var variable, map *map, robot *tab[1000])
 							{
 								bot->coordAku.x = bot->pos.x + i;
 								bot->coordAku.y = bot->pos.y + i - j;
-								return;
+								return true;
 							}
 						}
 					}
@@ -695,7 +778,7 @@ void nearestFriendC(robot *bot, var variable, map *map, robot *tab[1000])
 							{
 								bot->coordAku.x = bot->pos.x + i - j;
 								bot->coordAku.y = bot->pos.y - i;
-								return;
+								return true;
 							}
 						}
 					}
@@ -716,7 +799,7 @@ void nearestFriendC(robot *bot, var variable, map *map, robot *tab[1000])
 							{
 								bot->coordAku.x = bot->pos.x - i;
 								bot->coordAku.y = bot->pos.y - i + j;
-								return;
+								return true;
 							}
 						}
 					}
@@ -724,9 +807,11 @@ void nearestFriendC(robot *bot, var variable, map *map, robot *tab[1000])
 			}
 		}
 	}
+	return true;
 }
-void nearestResourceC(robot *bot, var variable, map *map, robot *tab[1000])
+bool nearestResourceC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	for(int i = 1; i+bot->pos.x < map->sizeX || bot->pos.x - i >= 0 || i+bot->pos.y < map->sizeY || bot->pos.y - i >= 0; i++)
 	{
 		if(bot->pos.y+i<map->sizeY)
@@ -741,7 +826,7 @@ void nearestResourceC(robot *bot, var variable, map *map, robot *tab[1000])
 						{
 							bot->coordAku.x = bot->pos.x - i + j;
 							bot->coordAku.y = bot->pos.y + i;
-							return;
+							return true;
 						}
 					}
 				}
@@ -759,7 +844,7 @@ void nearestResourceC(robot *bot, var variable, map *map, robot *tab[1000])
 						{
 							bot->coordAku.x = bot->pos.x + i;
 							bot->coordAku.y = bot->pos.y + i - j;
-							return;
+							return true;
 						}
 					}
 				}
@@ -777,7 +862,7 @@ void nearestResourceC(robot *bot, var variable, map *map, robot *tab[1000])
 						{
 							bot->coordAku.x = bot->pos.x + i - j;
 							bot->coordAku.y = bot->pos.y - i;
-							return;
+							return true;
 						}
 					}
 				}
@@ -795,16 +880,18 @@ void nearestResourceC(robot *bot, var variable, map *map, robot *tab[1000])
 						{
 							bot->coordAku.x = bot->pos.x - i;
 							bot->coordAku.y = bot->pos.y - i + j;
-							return;
+							return true;
 						}
 					}
 				}
 			}
 		}
 	}
+	return true;
 }
-void nearestShadowC(robot *bot, var variable, map *map, robot *tab[1000])
+bool nearestShadowC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	for(int i = 1; i+bot->pos.x < map->sizeX || bot->pos.x - i >= 0 || i+bot->pos.y < map->sizeY || bot->pos.y - i >= 0; i++)
 	{
 		if(bot->pos.y+i<map->sizeY)
@@ -817,7 +904,7 @@ void nearestShadowC(robot *bot, var variable, map *map, robot *tab[1000])
 					{
 						bot->coordAku.x = bot->pos.x - i + j;
 						bot->coordAku.y = bot->pos.y + i;
-						return;
+						return true;
 					}
 				}
 			}
@@ -832,7 +919,7 @@ void nearestShadowC(robot *bot, var variable, map *map, robot *tab[1000])
 					{
 						bot->coordAku.x = bot->pos.x + i;
 						bot->coordAku.y = bot->pos.y + i - j;
-						return;
+						return true;
 					}
 				}
 			}
@@ -847,7 +934,7 @@ void nearestShadowC(robot *bot, var variable, map *map, robot *tab[1000])
 					{
 						bot->coordAku.x = bot->pos.x + i - j;
 						bot->coordAku.y = bot->pos.y - i;
-						return;
+						return true;
 					}
 				}
 			}
@@ -862,15 +949,17 @@ void nearestShadowC(robot *bot, var variable, map *map, robot *tab[1000])
 					{
 						bot->coordAku.x = bot->pos.x - i;
 						bot->coordAku.y = bot->pos.y - i + j;
-						return;
+						return true;
 					}
 				}
 			}
 		}
 	}
+	return true;
 }
-void myBaseC(robot *bot, var variable, map *map, robot *tab[1000])
+bool myBaseC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	for(int i = 0; i < 1000; i++)
 	{
 		if(tab[i]->isRed == bot->isRed)
@@ -879,13 +968,15 @@ void myBaseC(robot *bot, var variable, map *map, robot *tab[1000])
 			{
 				bot->coordAku.x = tab[i]->pos.x;
 				bot->coordAku.y = tab[i]->pos.y;
-				return;
+				return true;
 			}
 		}
 	}
+	return true;
 }
-void yellC(robot *bot, var variable, map *map, robot *tab[1000])
+bool yellC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	for(int i = 0; i < 1000; i++)
 	{
 		if(tab[i]->isRed == bot->isRed)
@@ -895,24 +986,26 @@ void yellC(robot *bot, var variable, map *map, robot *tab[1000])
 			tab[i]->integerAku = bot->integerAku;
 		}
 	}
+	return true;
 }
-void findPathC(robot *bot, var variable, map *map, robot *tab[1000])
+bool findPathC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	free(bot->path);
 	if(bot->coordAku.x < 0 || bot->coordAku.x >= map->sizeX)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	if(bot->coordAku.y < 0 || bot->coordAku.y >= map->sizeY)
 	{
 		bot->isAlive = false;
-		return;
+		return false;
 	}
 	if(map->vision[(int)bot->isRed][bot->coordAku.x][bot->coordAku.y] && map->whole[bot->coordAku.x][bot->coordAku.y]!= -1)
 	{
 		bot->integerAku = 0;
-		return;
+		return true;
 	}
 	int **mapCpy = malloc(sizeof(int*) * map->sizeX);
 	for(int x = 0; x < map->sizeX; x++)
@@ -1016,31 +1109,57 @@ void findPathC(robot *bot, var variable, map *map, robot *tab[1000])
 		free(mapCpy[x]);
 	}
 	free(mapCpy);
+	return true;
 }
-void forwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
+bool forwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
+	if(bot->isBase)
+	{
+		bot->isAlive = false;
+		return false;
+	}
+	int id;
 	if(bot->pathPos < bot->pathLength)
 	{
+		id = map->whole[bot->pos.x][bot->pos.y];
+		map->whole[bot->pos.x][bot->pos.y] = -1;
 		bot->pathPos++;
 		bot->pos.x = bot->path[bot->pathPos].x;
 		bot->pos.y = bot->path[bot->pathPos].y;
+		map->whole[bot->pos.x][bot->pos.y] = id;
 	}
+	return true;
 }
-void backwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
+bool backwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
+	if(bot->isBase)
+	{
+		bot->isAlive = false;
+		return false;
+	}
+	int id;
 	if(bot->pathPos > 0)
 	{
+		id = map->whole[bot->pos.x][bot->pos.y];
+		map->whole[bot->pos.x][bot->pos.y] = -1;
 		bot->pathPos--;
 		bot->pos.x = bot->path[bot->pathPos].x;
 		bot->pos.y = bot->path[bot->pathPos].y;
+		map->whole[bot->pos.x][bot->pos.y] = id;
 	}
+	return true;
 }
-void lengthPathC(robot *bot, var variable, map *map, robot *tab[1000])
+bool lengthPathC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	bot->integerAku = bot->pathLength - bot->pathPos;
+	return true;
 }
-void unobstructedPathC(robot *bot, var variable, map *map, robot *tab[1000])
+bool unobstructedPathC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
 	for(int i = bot->pathPos; i < bot->pathLength; i++)
 	{
 		if(map->vision[bot->isRed][bot->path[i].x][bot->path[i].y])
@@ -1048,14 +1167,21 @@ void unobstructedPathC(robot *bot, var variable, map *map, robot *tab[1000])
 			if(map->whole[bot->path[i].x][bot->path[i].y]!=-1)
 			{
 				bot->integerAku = 0;
-				return;
+				return true;
 			}
 		}
 	}
 	bot->integerAku = 1;
+	return true;
 }
-void produceWithPathC(robot *bot, var variable, map *map, robot *tab[1000])
+bool produceWithPathC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(!actionLength(bot, 1))return false;
+	if(!bot->isBase)
+	{
+		bot->isAlive = false;
+		return false;
+	}
 	int idT;
 	for(idT = 0; idT<1000; idT++)
 	{
@@ -1063,4 +1189,5 @@ void produceWithPathC(robot *bot, var variable, map *map, robot *tab[1000])
 	}
 	produceC(bot, variable, map, tab);
 	findPathC(tab[idT], variable, map, tab);
+	return true;
 }
