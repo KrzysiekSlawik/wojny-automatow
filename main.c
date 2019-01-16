@@ -8,7 +8,7 @@
 
 int main()
 {
-	map *map = initMap(80, 50, 3, 1000, 0);
+	map *map = initMap(100, 100, 3, 200, 10);
 
 
 	robot *list[1000];
@@ -31,24 +31,17 @@ int main()
 	list[0]->taskCount = 0;
 
 	script *test = makeScript("test");
-	//script *book[2][10];
-	//book[0][0] = test;
-	printf("%ld ",(long int)moveC);
-	printf("%d ", test->variable[2].vid);
-	if(test->variable[2].isValue)printf("TESTer");
-	printf("%d", test->length);
-	//printf("%ld ",(long int)book[0][0]->funcPtr[0]);
 	time_t tlf=time(NULL);
 	while(list[0]->isAlive)
 	{
-		if(time(NULL)-tlf>1)
+		if(time(NULL)-tlf>0.1)
 		{
 			tlf=time(NULL);
 			tickRobots(test, list, map);
-
-			for(int y = 0; y<50; y++)
+			system("clear");
+			for(int y = 0; y<100; y++)
 			{
-				for(int x = 0; x<80; x++)
+				for(int x = 0; x<100; x++)
 				{
 					if(map->whole[x][y]==-3 || map->whole[x][y]==-2)printf("# ");
 					if(map->whole[x][y]>=0)printf("O ");
@@ -56,7 +49,6 @@ int main()
 				}
 				putchar('\n');
 			}
-			printf("\n%d", list[0]->taskCount);
 		}
 	}
 

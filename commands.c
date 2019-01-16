@@ -46,6 +46,7 @@ bool saveIC(robot *bot, var variable, map *map, robot *tab[1000])
 }
 bool loadXC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	if(variable.vid == 5)return true;
 	if(!actionLength(bot, 1))return false;
 	if(variable.isValue)
 	{
@@ -279,6 +280,7 @@ bool equalC(robot *bot, var variable, map *map, robot *tab[1000])
 bool jumpC(robot *bot, var variable, map *map, robot *tab[1000])
 {
 	if(!actionLength(bot, 1))return false;
+	if(bot->integerAku == 0)return true;
 	if(variable.isValue)
 	{
 		bot->taskCount = variable.vid-1;
@@ -366,7 +368,6 @@ bool moveC(robot *bot, var variable, map *map, robot *tab[1000])
 		map->whole[newPos.x][newPos.y] = map->whole[bot->pos.x][bot->pos.y];
 		map->whole[bot->pos.x][bot->pos.y] = -1;
 		bot -> pos = newPos;
-		printf(" ye ");
 	}
 	return true;
 }
@@ -1026,6 +1027,7 @@ bool findPathC(robot *bot, var variable, map *map, robot *tab[1000])
 			}
 		}
 	}
+
 	int step = 0;
 	mapCpy[bot->pos.x][bot->pos.y] = 0;
 	while(mapCpy[bot->coordAku.x][bot->coordAku.y]==-1)
@@ -1047,6 +1049,7 @@ bool findPathC(robot *bot, var variable, map *map, robot *tab[1000])
 				}
 			}
 		}
+		step++;
 	}
 	bot->pathLength = mapCpy[bot->coordAku.x][bot->coordAku.y]+1;
 	point *path = malloc(sizeof(point) * bot->pathLength);

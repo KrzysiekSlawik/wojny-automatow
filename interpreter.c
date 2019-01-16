@@ -170,14 +170,14 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 	int lines = wcl(file);
 	line *tab= malloc(sizeof(line)*lines);
 	int *first = malloc(sizeof(int)*lines);
-	bool (**funcPtr)(robot*, var, map*, robot**) = malloc(sizeof(bool(robot*, var, map*, robot**))*lines);
+	bool (**funcPtr)(robot*, var, map*, robot**) = malloc(sizeof(long int)*lines);
 	var *third = malloc(sizeof(var)*lines);
 
 	readToTab(file, tab);
 
-	tagToId(tab, first, third, lines);
-
 	variableInterpret(tab, third, lines);
+
+	tagToId(tab, first, third, lines);
 
 	functionInterpret(listfuncPtr, functions, tab, funcPtr, lines);
 
@@ -188,12 +188,12 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 	//freeing memory
 	for(int i=0; i<lines; i++)
 	{
-		free(tab[i].first);
-		free(tab[i].second);
-		free(tab[i].third);
+		//if(tab[i].first)free(tab[i].first);
+		//if(tab[i].second)free(tab[i].second);
+		//if(tab[i].third)free(tab[i].third);
 	}
-	free(tab);
-	free(first);
+	//free(tab);
+	//free(first);
 	fclose(file);
 	return new;
 }
@@ -201,7 +201,6 @@ void freeScript(script *scr)
 {
 	for(int i = 0; i<scr->length; i++)
 	{
-
 		free(scr->funcPtr[i]);
 	}
 	free(scr->variable);
@@ -211,6 +210,7 @@ int tickRobots(script *book, robot *tab[1000],  map *map)
 {
 	for(int i = 0; i < 1000; i++)
 	{
+		if(tab[i]->taskCount>=book->length)tab[i]->isAlive = false;
 		if(tab[i]->isAlive)
 		{
 			if(book->funcPtr[tab[i]->taskCount]
@@ -219,6 +219,7 @@ int tickRobots(script *book, robot *tab[1000],  map *map)
 				if(tab[i]->taskCount<book->length)
 				{
 					tab[i]->taskCount++;
+					printf("%d ", tab[i]->taskCount);
 				}
 			}
 		}
