@@ -61,5 +61,13 @@ map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar)
 			map->whole[x][sizeY-1-y]=map->whole[x][y];
 		}
 	}
+	for(int x = 0; x < sizeX; x++)
+	{
+		for(int y = 0; y < sizeY; y++)
+		{
+			map->vision[0][x][y]=true;
+			map->vision[1][x][y]=true;
+		}
+	}
 	return map;
 }

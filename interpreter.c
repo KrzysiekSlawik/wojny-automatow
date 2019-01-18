@@ -188,12 +188,15 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 	//freeing memory
 	for(int i=0; i<lines; i++)
 	{
-		//if(tab[i].first)free(tab[i].first);
-		//if(tab[i].second)free(tab[i].second);
-		//if(tab[i].third)free(tab[i].third);
+		if(tab[i].first)free(tab[i].first);
+		tab[i].first=NULL;
+		if(tab[i].second)free(tab[i].second);
+		tab[i].second=NULL;
+		if(tab[i].third)free(tab[i].third);
+		tab[i].third=NULL;
 	}
-	//free(tab);
-	//free(first);
+	free(tab);
+	free(first);
 	fclose(file);
 	return new;
 }

@@ -280,6 +280,7 @@ bool equalC(robot *bot, var variable, map *map, robot *tab[1000])
 bool jumpC(robot *bot, var variable, map *map, robot *tab[1000])
 {
 	if(!actionLength(bot, 1))return false;
+	printf("J%dJ", bot->integerAku);
 	if(bot->integerAku == 0)return true;
 	if(variable.isValue)
 	{
@@ -992,7 +993,8 @@ bool yellC(robot *bot, var variable, map *map, robot *tab[1000])
 bool findPathC(robot *bot, var variable, map *map, robot *tab[1000])
 {
 	if(!actionLength(bot, 1))return false;
-	free(bot->path);
+	if(bot->path!=NULL)free(bot->path);
+	bot->path = NULL;
 	if(bot->coordAku.x < 0 || bot->coordAku.x >= map->sizeX)
 	{
 		bot->isAlive = false;
@@ -1038,14 +1040,38 @@ bool findPathC(robot *bot, var variable, map *map, robot *tab[1000])
 			{
 				if(mapCpy[x][y] == step)
 				{
-					if(mapCpy[x-1][y+1]==-1)mapCpy[x-1][y+1] = step+1;
-					if(mapCpy[x][y+1]==-1)mapCpy[x][y+1] = step+1;
-					if(mapCpy[x+1][y+1]==-1)mapCpy[x+1][y+1] = step+1;
-					if(mapCpy[x+1][y]==-1)mapCpy[x+1][y] = step+1;
-					if(mapCpy[x+1][y-1]==-1)mapCpy[x+1][y-1] = step+1;
-					if(mapCpy[x][y-1]==-1)mapCpy[x][y-1] = step+1;
-					if(mapCpy[x-1][y-1]==-1)mapCpy[x-1][y-1] = step+1;
-					if(mapCpy[x-1][y]==-1)mapCpy[x-1][y] = step+1;
+					if(x-1>=0 && y+1<map->sizeY)
+					{
+						if(mapCpy[x-1][y+1]==-1)mapCpy[x-1][y+1] = step+1;
+					}
+					if(y+1<map->sizeY)
+					{
+						if(mapCpy[x][y+1]==-1)mapCpy[x][y+1] = step+1;
+					}
+					if(x+1<map->sizeX && y+1<map->sizeY)
+					{
+						if(mapCpy[x+1][y+1]==-1)mapCpy[x+1][y+1] = step+1;
+					}
+					if(x+1<map->sizeX)
+					{
+						if(mapCpy[x+1][y]==-1)mapCpy[x+1][y] = step+1;
+					}
+					if(x+1<map->sizeX && y-1>=0)
+					{
+						if(mapCpy[x+1][y-1]==-1)mapCpy[x+1][y-1] = step+1;
+					}
+					if(y+1<map->sizeY)
+					{
+						if(mapCpy[x][y-1]==-1)mapCpy[x][y-1] = step+1;
+					}
+					if(x-1>=0 && y-1>=0)
+					{
+						if(mapCpy[x-1][y-1]==-1)mapCpy[x-1][y-1] = step+1;
+					}
+					if(x-1>=0)
+					{
+						if(mapCpy[x-1][y]==-1)mapCpy[x-1][y] = step+1;
+					}
 				}
 			}
 		}
@@ -1053,57 +1079,81 @@ bool findPathC(robot *bot, var variable, map *map, robot *tab[1000])
 	}
 	bot->pathLength = mapCpy[bot->coordAku.x][bot->coordAku.y]+1;
 	point *path = malloc(sizeof(point) * bot->pathLength);
-	path[mapCpy[bot->coordAku.x][bot->coordAku.y]].x = bot->coordAku.x;
-	path[mapCpy[bot->coordAku.x][bot->coordAku.y]].y = bot->coordAku.y;
-	for(int i = mapCpy[bot->coordAku.x][bot->coordAku.y]; i>0; i--)
+	path[bot->pathLength-1].x = bot->coordAku.x;
+	path[bot->pathLength-1].y = bot->coordAku.y;
+	for(int i = bot->pathLength -1; i>0; i--)
 	{
-		if(mapCpy[path[i].x-1][path[i].y+1]==i-1)
+		if(path[i].x-1>=0 && path[i].y+1<map->sizeY)
 		{
-			path[i-1].x = path[i].x-1;
-			path[i-1].y = path[i].y+1;
-			continue;
+			if(mapCpy[path[i].x-1][path[i].y+1]==i-1)
+			{
+				path[i-1].x = path[i].x-1;
+				path[i-1].y = path[i].y+1;
+				continue;
+			}
 		}
-		if(mapCpy[path[i].x][path[i].y+1]==i-1)
+		if(path[i].y+1<map->sizeY)
 		{
-			path[i-1].x = path[i].x;
-			path[i-1].y = path[i].y+1;
-			continue;
+			if(mapCpy[path[i].x][path[i].y+1]==i-1)
+			{
+				path[i-1].x = path[i].x;
+				path[i-1].y = path[i].y+1;
+				continue;
+			}
 		}
-		if(mapCpy[path[i].x+1][path[i].y+1]==i-1)
+		if(path[i].x+1<map->sizeX && path[i].y+1<map->sizeY)
 		{
-			path[i-1].x = path[i].x+1;
-			path[i-1].y = path[i].y+1;
-			continue;
+			if(mapCpy[path[i].x+1][path[i].y+1]==i-1)
+			{
+				path[i-1].x = path[i].x+1;
+				path[i-1].y = path[i].y+1;
+				continue;
+			}
 		}
-		if(mapCpy[path[i].x+1][path[i].y]==i-1)
+		if(path[i].x+1<map->sizeX)
 		{
-			path[i-1].x = path[i].x+1;
-			path[i-1].y = path[i].y;
-			continue;
+			if(mapCpy[path[i].x+1][path[i].y]==i-1)
+			{
+				path[i-1].x = path[i].x+1;
+				path[i-1].y = path[i].y;
+				continue;
+			}
 		}
-		if(mapCpy[path[i].x+1][path[i].y-1]==i-1)
+		if(path[i].x+1<map->sizeX && path[i].y-1>=0)
 		{
-			path[i-1].x = path[i].x+1;
-			path[i-1].y = path[i].y-1;
-			continue;
+			if(mapCpy[path[i].x+1][path[i].y-1]==i-1)
+			{
+				path[i-1].x = path[i].x+1;
+				path[i-1].y = path[i].y-1;
+				continue;
+			}
 		}
-		if(mapCpy[path[i].x][path[i].y-1]==i-1)
+		if(path[i].y-1>=0)
 		{
-			path[i-1].x = path[i].x;
-			path[i-1].y = path[i].y-1;
-			continue;
+			if(mapCpy[path[i].x][path[i].y-1]==i-1)
+			{
+				path[i-1].x = path[i].x;
+				path[i-1].y = path[i].y-1;
+				continue;
+			}
 		}
-		if(mapCpy[path[i].x-1][path[i].y-1]==i-1)
+		if(path[i].x-1>=0 && path[i].y-1>=0)
 		{
-			path[i-1].x = path[i].x-1;
-			path[i-1].y = path[i].y-1;
-			continue;
+			if(mapCpy[path[i].x-1][path[i].y-1]==i-1)
+			{
+				path[i-1].x = path[i].x-1;
+				path[i-1].y = path[i].y-1;
+				continue;
+			}
 		}
-		if(mapCpy[path[i].x-1][path[i].y]==i-1)
+		if(path[i].x-1>=0)
 		{
-			path[i-1].x = path[i].x-1;
-			path[i-1].y = path[i].y;
-			continue;
+			if(mapCpy[path[i].x-1][path[i].y]==i-1)
+			{
+				path[i-1].x = path[i].x-1;
+				path[i-1].y = path[i].y;
+				continue;
+			}
 		}
 	}
 	bot->pathPos = 0;
@@ -1112,6 +1162,7 @@ bool findPathC(robot *bot, var variable, map *map, robot *tab[1000])
 		free(mapCpy[x]);
 	}
 	free(mapCpy);
+	bot->path = path;
 	return true;
 }
 bool forwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
@@ -1123,7 +1174,7 @@ bool forwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
 		return false;
 	}
 	int id;
-	if(bot->pathPos < bot->pathLength)
+	if(bot->pathPos < bot->pathLength - 1)
 	{
 		id = map->whole[bot->pos.x][bot->pos.y];
 		map->whole[bot->pos.x][bot->pos.y] = -1;
@@ -1157,7 +1208,7 @@ bool backwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
 bool lengthPathC(robot *bot, var variable, map *map, robot *tab[1000])
 {
 	if(!actionLength(bot, 1))return false;
-	bot->integerAku = bot->pathLength - bot->pathPos;
+	bot->integerAku = bot->pathLength - bot->pathPos - 1;
 	return true;
 }
 bool unobstructedPathC(robot *bot, var variable, map *map, robot *tab[1000])

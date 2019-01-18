@@ -29,6 +29,9 @@ int main()
 	list[0]->integerAku = 5;
 	list[0]->taskCountBis = 0;
 	list[0]->taskCount = 0;
+	list[0]->pathPos = 0;
+	printf("\n h%ld h",sizeof(long int));
+	printf("\n & %ld h",sizeof(&forwardPathC));
 
 	script *test = makeScript("test");
 	time_t tlf=time(NULL);
