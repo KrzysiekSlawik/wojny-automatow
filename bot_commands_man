@@ -1,0 +1,67 @@
+loadI
+	można używać z =wartością i adresem
+	wczytuje podaną zmienną do akumulatora
+	w przypadku braku argumentu wywołana - loadI 0
+	wywołanie z adresem spoza zakresu pamięci zabija robota
+saveI
+	można używać z =wartością i adresem
+	w obu przypadkach zapisuje wartość z akumulatora do zmiennej
+	w przypadku braku argumentu wywołana - saveI 0
+	wywołanie z adresem spoza zakresu pamięci zabija robota
+loadX
+	odpowiednik loadI przeznaczony dla akumulatora współrzędnych x
+	odwołania do pamięci dotyczą pamięci liczb całkowitych
+loadY
+	odpowiednik loadI przeznaczony dla akumulatora współrzędnych y
+	odwołania do pamięci dotyczą pamięci liczb całkowitych
+loadC
+	wczytuje z pamięci współrzędnych
+	można używać z =wartością i adresem działanie bez zmian
+saveC
+	zapisuje z akumulatora do pamięci współrzędnych
+	można używać z =wartością i adresem działanie bez zmian
+add
+	do akumulatora liczb całkowitych dodaje =wartość bądź wartość spod
+	wskazanego adresu
+sub
+	analogicznie do add odejmowanie
+addX
+	analogicznie do add dla współrzędnej X
+subX
+	analogicznie do sub dla współrzędnej X
+addY
+	analogicznie do add dla współrzędnej Y
+subY
+	analogicznie do sub dla współrzędnej Y
+greater
+	porównanie wartości z akumulatora z =wartością lub wartością spod adresu
+	zwraca 1 gdy akumulator większy
+	zwraca 0 w p.p.
+equal
+	porównanie wartości z akumulatora z =wartością lub wartością spod adresu
+	zwraca 1 gdy wartości są równe
+	zwraca 0 w p.p.
+jump
+	skok do ETYKIETY koniecznie pisanej dużymi literami lub linijki
+	skryptu =wartość lub skok do linijki na podstawie wartości spod adresu
+	linijki numerowane są od ZERA!
+move
+attack
+gather
+produce
+howManyUnits
+distance
+whatIs
+tell
+nearestEnemy
+nearestFriend
+nearestResource
+nearestShadow
+myBase
+yell
+findPath
+forwardPath
+backwardPath
+lengthPath
+unobstructedPath
+produceWithPath
