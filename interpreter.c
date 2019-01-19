@@ -209,17 +209,17 @@ void freeScript(script *scr)
 	free(scr->variable);
 	free(scr);
 }
-int tickRobots(script *book, robot *tab[1000],  map *map)
+int tickRobots(script **book[2], robot *tab[1000],  map *map)
 {
 	for(int i = 0; i < 1000; i++)
 	{
-		if(tab[i]->taskCount>=book->length)tab[i]->isAlive = false;
+		if(tab[i]->taskCount>=book[tab[i]->isRed][tab[i]->stratId]->length)tab[i]->isAlive = false;
 		if(tab[i]->isAlive)
 		{
-			if(book->funcPtr[tab[i]->taskCount]
-				(tab[i], book->variable[tab[i]->taskCount], map, tab))
+			if(book[tab[i]->isRed][tab[i]->stratId]->funcPtr[tab[i]->taskCount]
+				(tab[i], book[tab[i]->isRed][tab[i]->stratId]->variable[tab[i]->taskCount], map, tab))
 			{
-				if(tab[i]->taskCount<book->length)
+				if(tab[i]->taskCount<book[tab[i]->isRed][tab[i]->stratId]->length)
 				{
 					tab[i]->taskCount++;
 					printf("%d ", tab[i]->taskCount);
@@ -227,4 +227,10 @@ int tickRobots(script *book, robot *tab[1000],  map *map)
 			}
 		}
 	}
+}
+void addScriptToBook(script **book[2], char *name, bool isRed, int scrCount[])
+{
+	scrCount[isRed]++;
+	book[isRed] = realloc(book[isRed], sizeof(script**)*scrCount[isRed]);
+	book[isRed][scrCount[isRed]-1] = makeScript(name);
 }

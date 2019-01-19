@@ -43,5 +43,7 @@
 
 	void freeScript(script*);//deallocation
 
-	int tickRobots(script*, robot**,  map*);//script *book[2][]
+	int tickRobots(script**[2], robot**,  map*);//script *book[2][]
+
+	void addScriptToBook(script**[2], char*, bool, int[2]);
 #endif

@@ -20,11 +20,12 @@ int main()
 	list[0]->pos.x= 40;
 	list[0]->pos.y= 25;
 	map->whole[40][25]=0;
+	map->resources[0]=1000;
 	list[0]->isAlive = true;
 	list[0]->isRed = false;
 	list[0]->isWar = false;
 	list[0]->isSupp = false;
-	list[0]->isBase = false;
+	list[0]->isBase = true;
 	list[0]->stratId = 0;
 	list[0]->integerAku = 5;
 	list[0]->taskCountBis = 0;
@@ -32,8 +33,9 @@ int main()
 	list[0]->pathPos = 0;
 	printf("\n h%ld h",sizeof(long int));
 	printf("\n & %ld h",sizeof(&forwardPathC));
-
-	script *test = makeScript("test");
+	int scrCount[2]= {0, 0};
+	script **test[2];
+	addScriptToBook(test, "test", false, scrCount);
 	time_t tlf=time(NULL);
 	while(list[0]->isAlive)
 	{

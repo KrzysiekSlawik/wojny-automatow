@@ -530,7 +530,7 @@ bool produceC(robot *bot, var variable, map *map, robot *tab[1000])
 	tab[idT]->coordAku.x = 0;
 	tab[idT]->coordAku.y = 0;
 	tab[idT]->integerAku = 0;
-	free(tab[idT]->path);
+	if(tab[idT]!=NULL)free(tab[idT]->path);
 	tab[idT]->pathLength = 0;
 	tab[idT]->pathPos = 0;
 	for(int i = 0; i < ROBOTMEM; i++)
@@ -540,6 +540,7 @@ bool produceC(robot *bot, var variable, map *map, robot *tab[1000])
 		tab[idT]->integerMem[i] = 0;
 	}
 	map->resources[(int)bot->isRed]-=10;
+	map->whole[tab[idT]->pos.x][tab[idT]->pos.y] = idT;
 	return true;
 }
 bool howManyUnitsC(robot *bot, var variable, map *map, robot *tab[1000])
