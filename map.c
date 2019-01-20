@@ -4,17 +4,17 @@
 
 map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar)
 {
-	map *newMap = malloc(sizeof(map));
-	newMap->whole = malloc(sizeof(int*)*sizeX);
-	newMap->vision[0] = malloc(sizeof(bool*)*sizeX);
-	newMap->vision[1] = malloc(sizeof(bool*)*sizeX);
+	map *newMap = calloc(1, sizeof(map));
+	newMap->whole = calloc(sizeX, sizeof(int*));
+	newMap->vision[0] = calloc(sizeX, sizeof(bool*));
+	newMap->vision[1] = calloc(sizeX, sizeof(bool*));
 	newMap->sizeX = sizeX;
 	newMap->sizeY = sizeY;
 	for(int i = 0; i < sizeX; i++)
 	{
-		newMap->vision[0][i] = malloc(sizeof(bool)*sizeY);
-		newMap->vision[1][i] = malloc(sizeof(bool)*sizeY);
-		newMap->whole[i] = malloc(sizeof(int)*sizeY);
+		newMap->vision[0][i] = calloc(sizeY, sizeof(bool));
+		newMap->vision[1][i] = calloc(sizeY, sizeof(bool));
+		newMap->whole[i] = calloc(sizeY, sizeof(int));
 	}
 	srand(seed);
 	int randV;

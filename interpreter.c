@@ -12,7 +12,7 @@
 char * readWord(FILE *file)//returns NULL if it fails to read word
 {
 	char *str;
-	if((str = malloc(sizeof(char)*MAXLENGTH))==NULL)return NULL;
+	if((str = calloc(MAXLENGTH, sizeof(char)))==NULL)return NULL;
 	if(fscanf(file, "%s", str)==EOF)
 	{
 		free(str);
@@ -168,10 +168,10 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 		return NULL;
 	}
 	int lines = wcl(file);
-	line *tab= malloc(sizeof(line)*lines);
-	int *first = malloc(sizeof(int)*lines);
-	bool (**funcPtr)(robot*, var, map*, robot**) = malloc(sizeof(long int)*lines);
-	var *third = malloc(sizeof(var)*lines);
+	line *tab= calloc(lines, sizeof(line));
+	int *first = calloc(lines, sizeof(int));
+	bool (**funcPtr)(robot*, var, map*, robot**) = calloc(lines, sizeof(long int));
+	var *third = calloc(lines, sizeof(var));
 
 	readToTab(file, tab);
 
@@ -181,7 +181,7 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 
 	functionInterpret(listfuncPtr, functions, tab, funcPtr, lines);
 
-	script *new=malloc(sizeof(script));
+	script *new=calloc(1, sizeof(script));
 	new->funcPtr=funcPtr;
 	new->variable=third;
 	new->length = lines;
@@ -202,11 +202,8 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 }
 void freeScript(script *scr)
 {
-	for(int i = 0; i<scr->length; i++)
-	{
-		free(scr->funcPtr[i]);
-	}
 	free(scr->variable);
+	free(scr->funcPtr);
 	free(scr);
 }
 int tickRobots(script **book[2], robot *tab[1000],  map *map)

@@ -14,7 +14,7 @@ int main()
 	robot *list[1000];
 	for(int i = 0; i<1000; i++)
 	{
-		list[i] = malloc(sizeof(robot));
+		list[i] = calloc(1, sizeof(robot));
 	}
 	list[0]->hp=2;
 	list[0]->pos.x= 40;
@@ -33,12 +33,13 @@ int main()
 	list[0]->pathPos = 0;
 	int scrCount[2]= {1, 0};
 	script **test[2];
-	test[0]=malloc(sizeof(script*));
+	test[0]=calloc(1, sizeof(script*));
+	test[1]=calloc(1, sizeof(script*));
 	test[0][0] = makeScript("baseTest");
 	addScriptToBook(test, "test", false, scrCount);
 	time_t tlf=time(NULL);
 	int i=0;
-	while(i!=10)
+	while(true)
 	{
 		if(time(NULL)-tlf>0.1)
 		{
@@ -46,17 +47,17 @@ int main()
 			tlf=time(NULL);
 			tickRobots(test, list, curMap);
 			//system("clear");
-			/*
+
 			for(int y = 0; y<100; y++)
 			{
 				for(int x = 0; x<100; x++)
 				{
 					if(curMap->whole[x][y]>=0)printf("O ");
-					if(curMap->whole[x][y]==-3 || map->whole[x][y]==-2)printf("# ");
+					if(curMap->whole[x][y]==-3 || curMap->whole[x][y]==-2)printf("# ");
 					if(curMap->whole[x][y]==-1)printf("  ");
 				}
 				putchar('\n');
-			}*/
+			}
 		}
 	}
 	freeMap(curMap);
