@@ -46,4 +46,6 @@
 	int tickRobots(script**[2], robot**,  map*);//script *book[2][]
 
 	void addScriptToBook(script**[2], char*, bool, int[2]);
+
+	void freeBook(script**[2], int[2]);
 #endif

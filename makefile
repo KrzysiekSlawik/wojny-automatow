@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-I. -lm
+CFLAGS=-I. -lm -g
 DEPS = interpreter.h robot.h map.h commands.h
 OBJ = main.o interpreter.o commands.o map.o
 

@@ -4,17 +4,17 @@
 
 map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar)
 {
-	map *map = malloc(sizeof(map));
-	map->whole = malloc(sizeof(int*)*sizeX);
-	map->vision[0] = malloc(sizeof(bool*)*sizeX);
-	map->vision[1] = malloc(sizeof(bool*)*sizeX);
-	map->sizeX = sizeX;
-	map->sizeY = sizeY;
+	map *newMap = malloc(sizeof(map));
+	newMap->whole = malloc(sizeof(int*)*sizeX);
+	newMap->vision[0] = malloc(sizeof(bool*)*sizeX);
+	newMap->vision[1] = malloc(sizeof(bool*)*sizeX);
+	newMap->sizeX = sizeX;
+	newMap->sizeY = sizeY;
 	for(int i = 0; i < sizeX; i++)
 	{
-		map->vision[0][i] = malloc(sizeof(bool)*sizeY);
-		map->vision[1][i] = malloc(sizeof(bool)*sizeY);
-		map->whole[i] = malloc(sizeof(int)*sizeY);
+		newMap->vision[0][i] = malloc(sizeof(bool)*sizeY);
+		newMap->vision[1][i] = malloc(sizeof(bool)*sizeY);
+		newMap->whole[i] = malloc(sizeof(int)*sizeY);
 	}
 	srand(seed);
 	int randV;
@@ -28,7 +28,7 @@ map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar)
 				randV = -3;
 			}
 			else randV = -1;
-			map->whole[x][y] = randV;
+			newMap->whole[x][y] = randV;
 		}
 	}
 	int xVec;
@@ -39,16 +39,16 @@ map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar)
 		{
 			for(int y = 0; y < sizeY/2; y++)
 			{
-				if(map->whole[x][y]==-3)
+				if(newMap->whole[x][y]==-3)
 				{
 					xVec = rand()%3 - 1;
 					yVec = rand()%3 - 1;
 					if(x+xVec<sizeX && y+yVec<sizeY/2 && x+xVec>=0 && y+yVec>=0 )
 					{
-						map->whole[x+xVec][y+yVec] = -3;
+						newMap->whole[x+xVec][y+yVec] = -3;
 						randV = rand()%5;
 						if(randV!=1)randV=0;
-						map->whole[x+xVec][y+yVec] += randV;
+						newMap->whole[x+xVec][y+yVec] += randV;
 					}
 				}
 			}
@@ -58,16 +58,29 @@ map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar)
 	{
 		for(int y = 0; y < sizeY/2; y++)
 		{
-			map->whole[x][sizeY-1-y]=map->whole[x][y];
+			newMap->whole[x][sizeY-1-y]=newMap->whole[x][y];
 		}
 	}
 	for(int x = 0; x < sizeX; x++)
 	{
 		for(int y = 0; y < sizeY; y++)
 		{
-			map->vision[0][x][y]=true;
-			map->vision[1][x][y]=true;
+			newMap->vision[0][x][y]=true;
+			newMap->vision[1][x][y]=true;
 		}
 	}
-	return map;
+	return newMap;
+}
+void freeMap(map* toFree)
+{
+	for(int x = 0; x < toFree->sizeX; x++)
+	{
+		free(toFree->vision[0][x]);
+		free(toFree->vision[1][x]);
+		free(toFree->whole[x]);
+	}
+	free(toFree->vision[0]);
+	free(toFree->vision[1]);
+	free(toFree->whole);
+	free(toFree);
 }

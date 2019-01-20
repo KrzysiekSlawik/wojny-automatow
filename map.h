@@ -15,5 +15,5 @@ typedef struct map
 	int resources[2];
 }map;
 map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar);
-
+void freeMap(map*);
 #endif

@@ -280,7 +280,6 @@ bool equalC(robot *bot, var variable, map *map, robot *tab[1000])
 bool jumpC(robot *bot, var variable, map *map, robot *tab[1000])
 {
 	if(!actionLength(bot, 1))return false;
-	printf("J%dJ", bot->integerAku);
 	if(bot->integerAku == 0)return true;
 	if(variable.isValue)
 	{
@@ -446,6 +445,7 @@ bool gatherC(robot *bot, var variable, map *map, robot *tab[1000])
 }
 bool produceC(robot *bot, var variable, map *map, robot *tab[1000])
 {
+	printf("test");
 	if(!actionLength(bot, 1))return false;
 	if(!bot->isBase)
 	{
@@ -530,7 +530,6 @@ bool produceC(robot *bot, var variable, map *map, robot *tab[1000])
 	tab[idT]->coordAku.x = 0;
 	tab[idT]->coordAku.y = 0;
 	tab[idT]->integerAku = 0;
-	if(tab[idT]!=NULL)free(tab[idT]->path);
 	tab[idT]->pathLength = 0;
 	tab[idT]->pathPos = 0;
 	for(int i = 0; i < ROBOTMEM; i++)
