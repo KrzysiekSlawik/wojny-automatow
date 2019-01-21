@@ -1007,13 +1007,48 @@ bool findPathC(robot *bot, var variable, map *map, robot *tab[1000])
 	}
 	if(map->vision[(int)bot->isRed][bot->coordAku.x][bot->coordAku.y] && map->whole[bot->coordAku.x][bot->coordAku.y]!= -1)
 	{
-		bot->integerAku = 0;
-		return true;
+		int range = 0;
+		while(range <= 5)
+		{
+			range++;
+			if(bot->coordAku.x+range<map->sizeX)
+			{
+				if(map->vision[(int)bot->isRed][bot->coordAku.x+range][bot->coordAku.y] && map->whole[bot->coordAku.x+range][bot->coordAku.y]== -1)
+				{
+					bot->coordAku.x += range;
+					break;
+				}
+			}
+			if(bot->coordAku.x-range>=0)
+			{
+				if(map->vision[(int)bot->isRed][bot->coordAku.x-range][bot->coordAku.y] && map->whole[bot->coordAku.x-range][bot->coordAku.y]== -1)
+				{
+					bot->coordAku.x -= range;
+					break;
+				}
+			}
+			if(bot->coordAku.y+range<map->sizeY)
+			{
+				if(map->vision[(int)bot->isRed][bot->coordAku.x][bot->coordAku.y+range] && map->whole[bot->coordAku.x][bot->coordAku.y+range]== -1)
+				{
+					bot->coordAku.y += range;
+					break;
+				}
+			}
+			if(bot->coordAku.y-range>=0)
+			{
+				if(map->vision[(int)bot->isRed][bot->coordAku.x][bot->coordAku.y-range] && map->whole[bot->coordAku.x][bot->coordAku.y-range]== -1)
+				{
+					bot->coordAku.y -= range;
+					break;
+				}
+			}
+		}
 	}
-	int **mapCpy = malloc(sizeof(int*) * map->sizeX);
+	int **mapCpy = calloc(map->sizeX, sizeof(int*));
 	for(int x = 0; x < map->sizeX; x++)
 	{
-		mapCpy[x] = malloc(sizeof(int) * map->sizeY);
+		mapCpy[x] = calloc(map->sizeY, sizeof(int));
 	}
 	for(int x = 0; x < map->sizeX; x++)
 	{
@@ -1032,8 +1067,10 @@ bool findPathC(robot *bot, var variable, map *map, robot *tab[1000])
 
 	int step = 0;
 	mapCpy[bot->pos.x][bot->pos.y] = 0;
-	while(mapCpy[bot->coordAku.x][bot->coordAku.y]==-1)
+	bool changed = true;
+	while(mapCpy[bot->coordAku.x][bot->coordAku.y]==-1 && changed)
 	{
+		changed = false;
 		for(int x = 0; x < map->sizeX; x++)
 		{
 			for(int y = 0; y < map->sizeY; y++)
@@ -1042,43 +1079,89 @@ bool findPathC(robot *bot, var variable, map *map, robot *tab[1000])
 				{
 					if(x-1>=0 && y+1<map->sizeY)
 					{
-						if(mapCpy[x-1][y+1]==-1)mapCpy[x-1][y+1] = step+1;
+						if(mapCpy[x-1][y+1]==-1)
+						{
+							mapCpy[x-1][y+1] = step+1;
+							changed = true;
+						}
 					}
 					if(y+1<map->sizeY)
 					{
-						if(mapCpy[x][y+1]==-1)mapCpy[x][y+1] = step+1;
+						if(mapCpy[x][y+1]==-1)
+						{
+							mapCpy[x][y+1] = step+1;
+							changed = true;
+						}
 					}
 					if(x+1<map->sizeX && y+1<map->sizeY)
 					{
-						if(mapCpy[x+1][y+1]==-1)mapCpy[x+1][y+1] = step+1;
+						if(mapCpy[x+1][y+1]==-1)
+						{
+							mapCpy[x+1][y+1] = step+1;
+							changed = true;
+						}
 					}
 					if(x+1<map->sizeX)
 					{
-						if(mapCpy[x+1][y]==-1)mapCpy[x+1][y] = step+1;
+						if(mapCpy[x+1][y]==-1)
+						{
+							mapCpy[x+1][y] = step+1;
+							changed = true;
+						}
 					}
 					if(x+1<map->sizeX && y-1>=0)
 					{
-						if(mapCpy[x+1][y-1]==-1)mapCpy[x+1][y-1] = step+1;
+						{
+							if(mapCpy[x+1][y-1]==-1)
+							mapCpy[x+1][y-1] = step+1;
+							changed = true;
+						}
 					}
-					if(y+1<map->sizeY)
+					if(y-1>=0)
 					{
-						if(mapCpy[x][y-1]==-1)mapCpy[x][y-1] = step+1;
+						if(mapCpy[x][y-1]==-1)
+						{
+							mapCpy[x][y-1] = step+1;
+							changed = true;
+						}
 					}
 					if(x-1>=0 && y-1>=0)
 					{
-						if(mapCpy[x-1][y-1]==-1)mapCpy[x-1][y-1] = step+1;
+						if(mapCpy[x-1][y-1]==-1)
+						{
+							mapCpy[x-1][y-1] = step+1;
+							changed = true;
+						}
 					}
 					if(x-1>=0)
 					{
-						if(mapCpy[x-1][y]==-1)mapCpy[x-1][y] = step+1;
+						if(mapCpy[x-1][y]==-1)
+						{
+							mapCpy[x-1][y] = step+1;
+							changed = true;
+						}
 					}
 				}
 			}
 		}
 		step++;
 	}
+	if(mapCpy[bot->coordAku.x][bot->coordAku.y]==-1)
+	{
+		bot->integerAku = 0;
+		return true;
+	}
 	bot->pathLength = mapCpy[bot->coordAku.x][bot->coordAku.y]+1;
-	point *path = malloc(sizeof(point) * bot->pathLength);
+	if(bot->pathLength <= 0)
+	{
+		for(int x = 0; x < map->sizeX; x++)
+		{
+			free(mapCpy[x]);
+		}
+		free(mapCpy);
+		return false;
+	}
+	point *path = calloc(bot->pathLength, sizeof(point));
 	path[bot->pathLength-1].x = bot->coordAku.x;
 	path[bot->pathLength-1].y = bot->coordAku.y;
 	for(int i = bot->pathLength -1; i>0; i--)
@@ -1176,6 +1259,7 @@ bool forwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
 	int id;
 	if(bot->pathPos < bot->pathLength - 1)
 	{
+		if(map->whole[bot->path[bot->pathPos+1].x][bot->path[bot->pathPos+1].y]!=-1)return true;
 		id = map->whole[bot->pos.x][bot->pos.y];
 		map->whole[bot->pos.x][bot->pos.y] = -1;
 		bot->pathPos++;
@@ -1196,6 +1280,7 @@ bool backwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
 	int id;
 	if(bot->pathPos > 0)
 	{
+		if(map->whole[bot->path[bot->pathPos-1].x][bot->path[bot->pathPos-1].y]!=-1)return true;
 		id = map->whole[bot->pos.x][bot->pos.y];
 		map->whole[bot->pos.x][bot->pos.y] = -1;
 		bot->pathPos--;

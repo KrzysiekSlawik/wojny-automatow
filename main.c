@@ -39,7 +39,7 @@ int main()
 	addScriptToBook(test, "test", false, scrCount);
 	time_t tlf=time(NULL);
 	int i=0;
-	while(true)
+	while(i<500)
 	{
 		if(time(NULL)-tlf>0.1)
 		{
@@ -64,6 +64,7 @@ int main()
 	freeBook(test, scrCount);
 	for(int i = 0; i<1000; i++)
 	{
+		free(list[i]->path);
 		free(list[i]);
 	}
 }
