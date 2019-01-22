@@ -61,14 +61,6 @@ map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar)
 			newMap->whole[x][sizeY-1-y]=newMap->whole[x][y];
 		}
 	}
-	for(int x = 0; x < sizeX; x++)
-	{
-		for(int y = 0; y < sizeY; y++)
-		{
-			newMap->vision[0][x][y]=true;
-			newMap->vision[1][x][y]=true;
-		}
-	}
 	return newMap;
 }
 void freeMap(map* toFree)

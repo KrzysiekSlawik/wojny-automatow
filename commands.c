@@ -15,6 +15,20 @@ bool actionLength(robot *bot, int length)
 		return false;
 	}
 }
+bool visionUpdate(robot *bot, map *map)
+{
+	for(int x = 0; x<11; x++)
+	{
+		for(int y = 0; y<11; y++)
+		{
+			if(bot->pos.x-5+x>=0 && bot->pos.x-5+x<map->sizeX && bot->pos.y-5+y>=0 && bot->pos.y-5+y<map->sizeY)
+			{
+				map->vision[bot->isRed][bot->pos.x-5+x][bot->pos.y-5+y] = true;
+			}
+		}
+	}
+	return true;
+}
 bool loadIC(robot *bot, var variable, map *map, robot *tab[1000])
 {
 	if(!actionLength(bot, 1))return false;
@@ -369,6 +383,7 @@ bool moveC(robot *bot, var variable, map *map, robot *tab[1000])
 		map->whole[bot->pos.x][bot->pos.y] = -1;
 		bot -> pos = newPos;
 	}
+	visionUpdate(bot, map);
 	return true;
 }
 bool attackC(robot *bot, var variable, map *map, robot *tab[1000])
@@ -445,7 +460,6 @@ bool gatherC(robot *bot, var variable, map *map, robot *tab[1000])
 }
 bool produceC(robot *bot, var variable, map *map, robot *tab[1000])
 {
-	printf("test");
 	if(!actionLength(bot, 1))return false;
 	if(!bot->isBase)
 	{
@@ -540,6 +554,7 @@ bool produceC(robot *bot, var variable, map *map, robot *tab[1000])
 	}
 	map->resources[(int)bot->isRed]-=10;
 	map->whole[tab[idT]->pos.x][tab[idT]->pos.y] = idT;
+	visionUpdate(bot, map);
 	return true;
 }
 bool howManyUnitsC(robot *bot, var variable, map *map, robot *tab[1000])
@@ -1267,6 +1282,7 @@ bool forwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
 		bot->pos.y = bot->path[bot->pathPos].y;
 		map->whole[bot->pos.x][bot->pos.y] = id;
 	}
+	visionUpdate(bot, map);
 	return true;
 }
 bool backwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
@@ -1288,6 +1304,7 @@ bool backwardPathC(robot *bot, var variable, map *map, robot *tab[1000])
 		bot->pos.y = bot->path[bot->pathPos].y;
 		map->whole[bot->pos.x][bot->pos.y] = id;
 	}
+	visionUpdate(bot, map);
 	return true;
 }
 bool lengthPathC(robot *bot, var variable, map *map, robot *tab[1000])

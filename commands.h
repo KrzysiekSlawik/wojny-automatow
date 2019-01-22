@@ -4,6 +4,7 @@
 #include "robot.h"
 #include "interpreter.h"
 bool actionLength(robot *bot, int length);
+bool visionUpdate(robot *bot, map *map);
 //actual robots commands
 bool loadIC(robot *bot, var variable, map *map, robot *tab[1000]);
 bool saveIC(robot *bot, var variable, map *map, robot *tab[1000]);

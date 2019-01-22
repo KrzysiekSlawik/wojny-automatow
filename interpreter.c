@@ -58,7 +58,7 @@ void readToTab(FILE *file, line tab[])//reads whole file into tab of lines
 bool compStr(char *str1, char *str2)//compares strings, true if strings are the same
 {
 	int i=0;
-	while(str1[i]!='\0' && str2[i]!='\0')
+	while(str1[i]!='\0' && str2[i]!='\0' && i<MAXLENGTH)
 	{
 		if(str1[i]!=str2[i])return false;
 		i++;

@@ -39,7 +39,7 @@ int main()
 	addScriptToBook(test, "test", false, scrCount);
 	time_t tlf=time(NULL);
 	int i=0;
-	while(i<500)
+	while(i<100)
 	{
 		if(time(NULL)-tlf>0.1)
 		{
