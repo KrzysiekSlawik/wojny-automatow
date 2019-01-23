@@ -5,6 +5,7 @@
 #include "map.h"
 #include "commands.h"
 #include <time.h>
+#include "display.h"
 
 int main()
 {
@@ -16,26 +17,14 @@ int main()
 	{
 		list[i] = calloc(1, sizeof(robot));
 	}
-	list[0]->hp=2;
-	list[0]->pos.x= 40;
-	list[0]->pos.y= 25;
-	curMap->whole[40][25]=0;
-	curMap->resources[0]=1000;
-	list[0]->isAlive = true;
-	list[0]->isRed = false;
-	list[0]->isWar = false;
-	list[0]->isSupp = false;
-	list[0]->isBase = true;
-	list[0]->stratId = 0;
-	list[0]->integerAku = 5;
-	list[0]->taskCountBis = 0;
-	list[0]->taskCount = 0;
-	list[0]->pathPos = 0;
+	initBases(curMap, list);
 	int scrCount[2]= {1, 0};
 	script **test[2];
 	test[0]=calloc(1, sizeof(script*));
 	test[1]=calloc(1, sizeof(script*));
 	test[0][0] = makeScript("baseTest");
+	test[1][0] = makeScript("baseTest");
+
 	addScriptToBook(test, "test", false, scrCount);
 	time_t tlf=time(NULL);
 	int i=0;
@@ -46,18 +35,8 @@ int main()
 			i++;
 			tlf=time(NULL);
 			tickRobots(test, list, curMap);
-			//system("clear");
-
-			for(int y = 0; y<100; y++)
-			{
-				for(int x = 0; x<100; x++)
-				{
-					if(curMap->whole[x][y]>=0)printf("O ");
-					if(curMap->whole[x][y]==-3 || curMap->whole[x][y]==-2)printf("# ");
-					if(curMap->whole[x][y]==-1)printf("  ");
-				}
-				putchar('\n');
-			}
+			system("clear");
+			printMap(curMap, list);
 		}
 	}
 	freeMap(curMap);

@@ -20,5 +20,4 @@ typedef struct robot	{
 	int pathLength;
 	int pathPos;
 }robot;
-
 #endif

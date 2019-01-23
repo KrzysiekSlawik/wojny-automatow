@@ -3,6 +3,7 @@
 
 
 #include <stdbool.h>
+#include "robot.h"
 typedef struct map
 {
 	/*	-3 - obstacle
@@ -16,4 +17,5 @@ typedef struct map
 }map;
 map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar);
 void freeMap(map*);
+void initBases(map *gameMap, robot *list[1000]);
 #endif
