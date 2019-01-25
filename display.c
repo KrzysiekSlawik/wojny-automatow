@@ -34,7 +34,7 @@ void printMap(map *gameMap, robot *list[1000])
                     }
                     else
                     {
-                        printf(" *");
+                        printf(" #");
                     }
                 }
                 else
@@ -46,7 +46,7 @@ void printMap(map *gameMap, robot *list[1000])
                     }
                     else
                     {
-                        printf(" *");
+                        printf(" #");
                     }
                 }
             }

@@ -86,7 +86,7 @@ void freeMap(map* toFree)
 	free(toFree->whole);
 	free(toFree);
 }
-void initBases(map *gameMap, robot *list[1000])
+void initBases(map *gameMap, robot *list[ROBOTSLIMIT])
 {
 	var variable;
 	int i;
@@ -148,4 +148,70 @@ void initBases(map *gameMap, robot *list[1000])
 			gameMap->vision[1][x][y] = false;
 		}
 	}
+}
+map *initMapfromCF(char *name)
+{
+	FILE *file = fopen(name, "r");
+	int sizeX=0;
+	int sizeY=0;
+	int seed=0;
+	int density=0;
+	int growpar=0;
+	int redResources=0;
+	int greenResources=0;
+	char *buff;
+
+	buff = readWord(file);
+	free(buff);
+	buff = readWord(file);
+	sizeX = atoi(buff);
+	free(buff);
+
+	buff = readWord(file);
+	free(buff);
+	buff = readWord(file);
+	sizeY = atoi(buff);
+	free(buff);
+	//map generator works only for even sizeY, so we make sure its even
+	if(sizeY%2!=0)
+	{
+		sizeY++;
+	}
+
+	buff = readWord(file);
+	free(buff);
+	buff = readWord(file);
+	seed = atoi(buff);
+	free(buff);
+
+	buff = readWord(file);
+	free(buff);
+	buff = readWord(file);
+	density = atoi(buff);
+	free(buff);
+
+	buff = readWord(file);
+	free(buff);
+	buff = readWord(file);
+	growpar = atoi(buff);
+	free(buff);
+
+	buff = readWord(file);
+	free(buff);
+	buff = readWord(file);
+	redResources = atoi(buff);
+	free(buff);
+
+	buff = readWord(file);
+	free(buff);
+	buff = readWord(file);
+	greenResources = atoi(buff);
+	free(buff);
+
+	fclose(file);
+	map *newMap = initMap(sizeX, sizeY, seed, density, growpar);
+	newMap->resources[0] = greenResources;
+	newMap->resources[1] = redResources;
+
+	return newMap;
 }

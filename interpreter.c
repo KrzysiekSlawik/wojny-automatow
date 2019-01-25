@@ -143,7 +143,7 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 	functions[21] = "whatIs";
 	functions[22] = "tell";
 	functions[23] = "nearestEnemy";
-	functions[24] = "nearestFriendC";
+	functions[24] = "nearestFriend";
 	functions[25] = "nearestResource";
 	functions[26] = "nearestShadow";
 	functions[27] = "myBase";
@@ -185,7 +185,7 @@ script *makeScript(char *fileName)//returns structure representing scripts of ro
 	new->funcPtr=funcPtr;
 	new->variable=third;
 	new->length = lines;
-	//freeing memory
+
 	for(int i=0; i<lines; i++)
 	{
 		if(tab[i].first)free(tab[i].first);
@@ -206,29 +206,52 @@ void freeScript(script *scr)
 	free(scr->funcPtr);
 	free(scr);
 }
-int tickRobots(script **book[2], robot *tab[1000],  map *map)
+int tickRobots(script **book[2], robot *tab[ROBOTSLIMIT],  map *map)
 {
-	for(int i = 0; i < 1000; i++)
+	for(int i = 0; i < ROBOTSLIMIT; i++)
 	{
-		if(tab[i]->taskCount>=book[tab[i]->isRed][tab[i]->stratId]->length)tab[i]->isAlive = false;
-		if(tab[i]->isAlive)
+		int taskCount = tab[i]->taskCount;
+		bool isRed = tab[i]->isRed;
+		int stratId = tab[i]->stratId;
+		bool isAlive = tab[i]->isAlive;
+		if(taskCount>=book[isRed][stratId]->length)
 		{
-			if(book[(int)tab[i]->isRed][tab[i]->stratId]->funcPtr[tab[i]->taskCount]
-				(tab[i], book[(int)tab[i]->isRed][tab[i]->stratId]->variable[tab[i]->taskCount], map, tab))
+			isAlive = false;
+		}
+		if(isAlive)
+		{
+			if(book[(int)isRed][stratId]->funcPtr[taskCount]
+				(tab[i], book[(int)isRed][stratId]->variable[taskCount], map, tab))
 			{
-				if(tab[i]->taskCount<book[(int)tab[i]->isRed][tab[i]->stratId]->length)
+				if(taskCount<book[(int)isRed][stratId]->length)
 				{
 					tab[i]->taskCount++;
 				}
 			}
 		}
 	}
+	return 0;
 }
 void addScriptToBook(script **book[2], char *name, bool isRed, int scrCount[])
 {
 	scrCount[isRed]++;
 	book[isRed] = realloc(book[isRed], sizeof(script**)*scrCount[isRed]);
 	book[isRed][scrCount[isRed]-1] = makeScript(name);
+}
+void makeTeamScripts(char *fileName, bool isRed, script **book[2], int scrLines[2])
+{
+	FILE *file = fopen(fileName, "rf");
+	scrLines[isRed] = wcl(file);
+	book[isRed] = calloc(scrLines[isRed], sizeof(script*));
+	char *buff;
+
+	for(int i = 0; i<scrLines[isRed]; i++)
+	{
+		buff = readWord(file);
+		book[isRed][i] = makeScript(buff);
+		free(buff);
+	}
+	fclose(file);
 }
 void freeBook(script **book[2], int scrCount[2])
 {

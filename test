@@ -1,0 +1,7 @@
+START nearestShadow _
+_ findPath _
+FOR forwardPath _
+_ lengthPath _
+_ jump FOR
+_ loadI =1
+_ jump START

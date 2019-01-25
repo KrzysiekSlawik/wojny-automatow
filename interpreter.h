@@ -47,5 +47,7 @@
 
 	void addScriptToBook(script**[2], char*, bool, int[2]);
 
+	void makeTeamScripts(char *fileName, bool isRed, script **book[2], int scrLines[2]);
+
 	void freeBook(script**[2], int[2]);
 #endif

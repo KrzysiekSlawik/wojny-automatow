@@ -2,7 +2,12 @@
 #define ROBOT_H
 
 #include <stdbool.h>
+#ifndef ROBOTMEM
 #define ROBOTMEM 10
+#endif
+#ifndef ROBOTSLIMIT
+#define ROBOTSLIMIT 1000
+#endif
 typedef struct point	{
 	int x, y;
 }point;

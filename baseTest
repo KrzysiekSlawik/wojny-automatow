@@ -1,0 +1,3 @@
+START produce =1
+_ loadI =1
+_ jump START

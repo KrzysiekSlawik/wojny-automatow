@@ -9,7 +9,7 @@ typedef struct map
 	/*	-3 - obstacle
 		-2 - gold mine
 		-1 -nothing
-		0-1000 - units*/
+		0-ROBOTSLIMIT - units*/
 	int sizeX, sizeY;
 	int **whole;
 	bool **vision[2];
@@ -17,5 +17,6 @@ typedef struct map
 }map;
 map *initMap(int sizeX, int sizeY, int seed, int noisePar, int limitPar);
 void freeMap(map*);
-void initBases(map *gameMap, robot *list[1000]);
+void initBases(map *gameMap, robot *list[ROBOTSLIMIT]);
+map *initMapfromCF(char *name);
 #endif
