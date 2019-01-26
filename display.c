@@ -1,67 +1,68 @@
 #include "display.h"
 #include <stdio.h>
-void red()
+#include <ncurses.h>
+void printMap(map *gameMap, robot *list[ROBOTSLIMIT], WINDOW *mainWin, int px, int py, int sizeX, int sizeY)
 {
-  printf("\033[1;31m");
-}
-void gold()
-{
-  printf("\033[1;33m");
-}
-void green()
-{
-  printf("\033[0;32m");
-}
-void white()
-{
-  printf("\033[0m");
-}
-
-void printMap(map *gameMap, robot *list[1000])
-{
-    for(int y = 0; y<gameMap->sizeY; y++)
+    wclear(mainWin);
+    for(int y = 0; y<sizeY; y++)
     {
-        for(int x = 0; x<gameMap->sizeX; x++)
+        for(int x = 0; x<sizeX; x++)
         {
-            if(gameMap->whole[x][y]>=0)
+            if(gameMap->whole[x+px][y+py]>=0)
             {
-                if(list[gameMap->whole[x][y]]->isRed)
+                if(list[gameMap->whole[x+px][y+py]]->isRed)
                 {
-                    red();
-                    if(list[gameMap->whole[x][y]]->isBase)
+                    if(list[gameMap->whole[x+px][y+py]]->isBase)
                     {
-                        printf(" Q");
+                        wattron(mainWin, COLOR_PAIR(2));
+                        wprintw(mainWin, "Q");
+                        wattroff(mainWin, COLOR_PAIR(2));
                     }
                     else
                     {
-                        printf(" #");
+                        wattron(mainWin, COLOR_PAIR(6));
+                        wattron(mainWin, A_BOLD);
+                        wprintw(mainWin, "O");
+                        wattroff(mainWin, COLOR_PAIR(6));
+                        wattroff(mainWin, A_BOLD);
                     }
                 }
                 else
                 {
-                    green();
-                    if(list[gameMap->whole[x][y]]->isBase)
+                    if(list[gameMap->whole[x+px][y+py]]->isBase)
                     {
-                        printf(" Q");
+                        wattron(mainWin, COLOR_PAIR(1));
+                        wprintw(mainWin, "Q");
+                        wattroff(mainWin, COLOR_PAIR(1));
                     }
                     else
                     {
-                        printf(" #");
+                        wattron(mainWin, COLOR_PAIR(5));
+                        wattron(mainWin, A_BOLD);
+                        wprintw(mainWin, "O");
+                        wattroff(mainWin, COLOR_PAIR(5));
+                        wattroff(mainWin, A_BOLD);
                     }
                 }
             }
-            else if(gameMap->whole[x][y]==-3)
+            else if(gameMap->whole[x+px][y+py]==-3)
             {
-                white();
-                printf("##");
+                wattron(mainWin, COLOR_PAIR(4));
+                wprintw(mainWin, "#");
+                wattroff(mainWin, COLOR_PAIR(4));
             }
-            else if(gameMap->whole[x][y]==-2)
+            else if(gameMap->whole[x+px][y+py]==-2)
             {
-                gold();
-                printf("##");
+                wattron(mainWin, COLOR_PAIR(3));
+                wprintw(mainWin, "#");
+                wattroff(mainWin, COLOR_PAIR(3));
             }
-            else if(gameMap->whole[x][y]==-1)printf("  ");
+            else if(gameMap->whole[x+px][y+py]==-1)
+            {
+                wprintw(mainWin, " ");
+            }
         }
-        putchar('\n');
     }
+    wborder(mainWin, '|', '|', '-', '-', '+', '+', '+', '+');
+    wrefresh(mainWin);
 }

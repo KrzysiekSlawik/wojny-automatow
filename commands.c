@@ -665,6 +665,7 @@ bool nearestEnemyC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 							{
 								bot->coordAku.x = bot->pos.x - i + j;
 								bot->coordAku.y = bot->pos.y + i;
+								bot->integerAku = 1;
 								return true;
 							}
 						}
@@ -686,6 +687,7 @@ bool nearestEnemyC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 							{
 								bot->coordAku.x = bot->pos.x + i;
 								bot->coordAku.y = bot->pos.y + i - j;
+								bot->integerAku = 1;
 								return true;
 							}
 						}
@@ -707,6 +709,7 @@ bool nearestEnemyC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 							{
 								bot->coordAku.x = bot->pos.x + i - j;
 								bot->coordAku.y = bot->pos.y - i;
+								bot->integerAku = 1;
 								return true;
 							}
 						}
@@ -728,6 +731,7 @@ bool nearestEnemyC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 							{
 								bot->coordAku.x = bot->pos.x - i;
 								bot->coordAku.y = bot->pos.y - i + j;
+								bot->integerAku = 1;
 								return true;
 							}
 						}
@@ -736,6 +740,7 @@ bool nearestEnemyC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 			}
 		}
 	}
+	bot->integerAku = 0;
 	return true;
 }
 bool nearestFriendC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
@@ -757,6 +762,7 @@ bool nearestFriendC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 							{
 								bot->coordAku.x = bot->pos.x - i + j;
 								bot->coordAku.y = bot->pos.y + i;
+								bot->integerAku = 1;
 								return true;
 							}
 						}
@@ -778,6 +784,7 @@ bool nearestFriendC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 							{
 								bot->coordAku.x = bot->pos.x + i;
 								bot->coordAku.y = bot->pos.y + i - j;
+								bot->integerAku = 1;
 								return true;
 							}
 						}
@@ -799,6 +806,7 @@ bool nearestFriendC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 							{
 								bot->coordAku.x = bot->pos.x + i - j;
 								bot->coordAku.y = bot->pos.y - i;
+								bot->integerAku = 1;
 								return true;
 							}
 						}
@@ -820,6 +828,7 @@ bool nearestFriendC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 							{
 								bot->coordAku.x = bot->pos.x - i;
 								bot->coordAku.y = bot->pos.y - i + j;
+								bot->integerAku = 1;
 								return true;
 							}
 						}
@@ -828,6 +837,7 @@ bool nearestFriendC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 			}
 		}
 	}
+	bot->integerAku = 0;
 	return true;
 }
 bool nearestResourceC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
@@ -847,6 +857,7 @@ bool nearestResourceC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT
 						{
 							bot->coordAku.x = bot->pos.x - i + j;
 							bot->coordAku.y = bot->pos.y + i;
+							bot->integerAku = 1;
 							return true;
 						}
 					}
@@ -865,6 +876,7 @@ bool nearestResourceC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT
 						{
 							bot->coordAku.x = bot->pos.x + i;
 							bot->coordAku.y = bot->pos.y + i - j;
+							bot->integerAku = 1;
 							return true;
 						}
 					}
@@ -883,6 +895,7 @@ bool nearestResourceC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT
 						{
 							bot->coordAku.x = bot->pos.x + i - j;
 							bot->coordAku.y = bot->pos.y - i;
+							bot->integerAku = 1;
 							return true;
 						}
 					}
@@ -901,6 +914,7 @@ bool nearestResourceC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT
 						{
 							bot->coordAku.x = bot->pos.x - i;
 							bot->coordAku.y = bot->pos.y - i + j;
+							bot->integerAku = 1;
 							return true;
 						}
 					}
@@ -908,6 +922,7 @@ bool nearestResourceC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT
 			}
 		}
 	}
+	bot->integerAku = 0;
 	return true;
 }
 bool nearestShadowC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
@@ -925,6 +940,7 @@ bool nearestShadowC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 					{
 						bot->coordAku.x = bot->pos.x - i + j;
 						bot->coordAku.y = bot->pos.y + i;
+						bot->integerAku = 1;
 						return true;
 					}
 				}
@@ -940,6 +956,7 @@ bool nearestShadowC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 					{
 						bot->coordAku.x = bot->pos.x + i;
 						bot->coordAku.y = bot->pos.y + i - j;
+						bot->integerAku = 1;
 						return true;
 					}
 				}
@@ -955,6 +972,7 @@ bool nearestShadowC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 					{
 						bot->coordAku.x = bot->pos.x + i - j;
 						bot->coordAku.y = bot->pos.y - i;
+						bot->integerAku = 1;
 						return true;
 					}
 				}
@@ -970,12 +988,14 @@ bool nearestShadowC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 					{
 						bot->coordAku.x = bot->pos.x - i;
 						bot->coordAku.y = bot->pos.y - i + j;
+						bot->integerAku = 1;
 						return true;
 					}
 				}
 			}
 		}
 	}
+	bot->integerAku = 0;
 	return true;
 }
 bool myBaseC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
@@ -989,10 +1009,12 @@ bool myBaseC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])
 			{
 				bot->coordAku.x = tab[i]->pos.x;
 				bot->coordAku.y = tab[i]->pos.y;
+				bot->integerAku = 1;
 				return true;
 			}
 		}
 	}
+	bot->integerAku = 0;
 	return true;
 }
 bool yellC(robot *bot, var variable, map *map, robot *tab[ROBOTSLIMIT])

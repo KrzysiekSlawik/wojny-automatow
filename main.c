@@ -6,10 +6,42 @@
 #include "commands.h"
 #include <time.h>
 #include "display.h"
+#include <ncurses.h>
 
 int main()
 {
+	//ncurses initialization
+	initscr();
+	keypad(stdscr, TRUE);
+	noecho();
+	int delay = 5;
+	halfdelay(delay);
+	start_color();
+	init_pair(1, COLOR_GREEN, COLOR_GREEN);
+	init_pair(2, COLOR_RED, COLOR_RED);
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(4, COLOR_WHITE, COLOR_BLACK);
+	init_pair(5, COLOR_GREEN, COLOR_BLACK);
+	init_pair(6, COLOR_RED, COLOR_BLACK);
+	WINDOW *mainWin;
+	int winSizeX;
+	int winSizeY;
+
+
+	clear();
+	getmaxyx(stdscr, winSizeY, winSizeX);
+	printw("%d %d", winSizeY, winSizeX);
+	refresh();
 	map *curMap = initMapfromCF("map.cfg");
+	if(curMap->sizeY<winSizeY)
+	{
+		winSizeY = curMap->sizeY;
+	}
+	if(curMap->sizeX<winSizeX - 20)
+	{
+		winSizeX = curMap->sizeY;
+	}
+	mainWin = newwin(winSizeY, winSizeX, 0, 0);
 	robot *list[ROBOTSLIMIT];
 	for(int i = 0; i<ROBOTSLIMIT; i++)
 	{
@@ -21,17 +53,53 @@ int main()
 
 	makeTeamScripts("scrRed", true, test, scrCount);
 	makeTeamScripts("scrGreen", false, test, scrCount);
-
-	time_t tlf=time(NULL);
+	int input=0;
+	int px=0, py=0;
 	while(true)
 	{
-		if(time(NULL)-tlf>0.1)
+		input = getch();
+		switch(input)
 		{
-			tlf=time(NULL);
-			tickRobots(test, list, curMap);
-			system("clear");
-			printMap(curMap, list);
+			case KEY_LEFT:
+				if(px > 0)
+				{
+					px--;
+				}
+				break;
+			case KEY_RIGHT:
+				if(px+winSizeX<curMap->sizeX)
+				{
+					px++;
+				}
+				break;
+			case KEY_UP:
+				if(py > 0)
+				{
+					py--;
+				}
+				break;
+			case KEY_DOWN:
+				if(py+winSizeY<curMap->sizeY)
+				{
+					py++;
+				}
+				break;
+			case '+':
+				if(delay > 1)
+				{
+					delay--;
+					cbreak();
+					halfdelay(delay);
+				}
+				break;
+			case '-':
+				delay++;
+				cbreak();
+				halfdelay(delay);
+				break;
 		}
+		tickRobots(test, list, curMap);
+		printMap(curMap, list, mainWin, px, py, winSizeX, winSizeY);
 	}
 	freeMap(curMap);
 	freeBook(test, scrCount);
@@ -40,4 +108,5 @@ int main()
 		free(list[i]->path);
 		free(list[i]);
 	}
+	endwin();//end ncurses
 }
