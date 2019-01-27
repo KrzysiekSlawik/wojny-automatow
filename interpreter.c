@@ -217,6 +217,7 @@ int tickRobots(script **book[2], robot *tab[ROBOTSLIMIT],  map *map)
 		if(taskCount>=book[isRed][stratId]->length)
 		{
 			isAlive = false;
+			map->whole[tab[i]->pos.x][tab[i]->pos.y]=-1;
 		}
 		if(isAlive)
 		{
@@ -229,6 +230,16 @@ int tickRobots(script **book[2], robot *tab[ROBOTSLIMIT],  map *map)
 				}
 			}
 		}
+	}
+	if(!tab[0]->isAlive)
+	{
+		//red base destroyed
+		return 1;
+	}
+	if(!tab[1]->isAlive)
+	{
+		//red base destroyed
+		return 2;
 	}
 	return 0;
 }

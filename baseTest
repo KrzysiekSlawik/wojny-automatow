@@ -1,3 +1,6 @@
+_ produce =1
+_ produce =2
+_ produce =2
 START produce =1
 _ loadI =1
 _ jump START

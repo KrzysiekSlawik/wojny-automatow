@@ -44,8 +44,9 @@ equal
 jump
 	skok do ETYKIETY koniecznie pisanej dużymi literami lub linijki
 	skryptu =wartość lub skok do linijki na podstawie wartości spod adresu
-	linijki numerowane są od ZERA!
+	linijki numerowane są od ZERA! Wykonany pod warunkiem integerAku != 0
 move
+
 attack
 gather
 produce
@@ -54,9 +55,14 @@ distance
 whatIs
 tell
 nearestEnemy
+	jeżeli znaleziony => integerAku = 1 wynik w coordAku
+	wpp integerAku = 0
 nearestFriend
+	jak wyżej
 nearestResource
+	jak wyżej
 nearestShadow
+	jak wyżej
 myBase
 yell
 findPath

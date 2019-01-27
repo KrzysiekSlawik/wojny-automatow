@@ -8,6 +8,7 @@
 #include "display.h"
 #include <ncurses.h>
 
+#define TIMEOUT 100
 int main()
 {
 	//ncurses initialization
@@ -24,24 +25,27 @@ int main()
 	init_pair(5, COLOR_GREEN, COLOR_BLACK);
 	init_pair(6, COLOR_RED, COLOR_BLACK);
 	WINDOW *mainWin;
+	WINDOW *statsWin;
 	int winSizeX;
 	int winSizeY;
 
 
-	clear();
 	getmaxyx(stdscr, winSizeY, winSizeX);
-	printw("%d %d", winSizeY, winSizeX);
-	refresh();
 	map *curMap = initMapfromCF("map.cfg");
 	if(curMap->sizeY<winSizeY)
 	{
 		winSizeY = curMap->sizeY;
 	}
-	if(curMap->sizeX<winSizeX - 20)
+	if(curMap->sizeX<winSizeX - 15)
 	{
-		winSizeX = curMap->sizeY;
+		winSizeX = curMap->sizeX - 15;
+	}
+	else
+	{
+		winSizeX -= 15;
 	}
 	mainWin = newwin(winSizeY, winSizeX, 0, 0);
+	statsWin = newwin(winSizeY, 15, 0, winSizeX + 1);
 	robot *list[ROBOTSLIMIT];
 	for(int i = 0; i<ROBOTSLIMIT; i++)
 	{
@@ -55,7 +59,9 @@ int main()
 	makeTeamScripts("scrGreen", false, test, scrCount);
 	int input=0;
 	int px=0, py=0;
-	while(true)
+	int state = 0;
+	int i=0;
+	while(!state)
 	{
 		input = getch();
 		switch(input)
@@ -84,7 +90,7 @@ int main()
 					py++;
 				}
 				break;
-			case '+':
+			case 'k':
 				if(delay > 1)
 				{
 					delay--;
@@ -92,14 +98,26 @@ int main()
 					halfdelay(delay);
 				}
 				break;
-			case '-':
+			case 'l':
 				delay++;
 				cbreak();
 				halfdelay(delay);
 				break;
+			case 'q':
+				state = 3;
+				break;
+			case 's':
+				while((state = tickRobots(test, list, curMap))==0 && i!=TIMEOUT)
+				{
+					i++;
+				}
+				i = 0;
+				break;
+			default:
+				state = tickRobots(test, list, curMap);
+				break;
 		}
-		tickRobots(test, list, curMap);
-		printMap(curMap, list, mainWin, px, py, winSizeX, winSizeY);
+		printMap(curMap, list, mainWin, px, py, winSizeX, winSizeY, statsWin);
 	}
 	freeMap(curMap);
 	freeBook(test, scrCount);
@@ -108,5 +126,18 @@ int main()
 		free(list[i]->path);
 		free(list[i]);
 	}
+	delwin(mainWin);
 	endwin();//end ncurses
+	if(state == 1)
+	{
+		printf("\ngreen won\n");
+	}
+	if(state == 2)
+	{
+		printf("\nred won\n");
+	}
+	if(state == 3)
+	{
+		printf("\nquited before end\n");
+	}
 }

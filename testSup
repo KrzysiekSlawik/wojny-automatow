@@ -1,0 +1,15 @@
+START nearestResource _
+_ jump MINE
+_ loadI =1
+_ jump START
+MINE findPath _
+FOR forwardPath _
+_ forwardPath _
+_ forwardPath _
+_ lengthPath _
+_ jump FOR
+_ nearestResource _
+_ gather _
+_ gather _
+_ loadI =1
+_ jump START
