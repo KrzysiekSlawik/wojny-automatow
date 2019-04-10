@@ -1,6 +1,37 @@
 #include "display.h"
 #include <stdio.h>
 #include <ncurses.h>
+void initDisplay()
+{
+  //ncurses initialization
+	initscr();
+	keypad(stdscr, TRUE);
+	noecho();
+	start_color();
+	init_pair(1, COLOR_GREEN, COLOR_GREEN);
+	init_pair(2, COLOR_RED, COLOR_RED);
+	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
+	init_pair(4, COLOR_WHITE, COLOR_BLACK);
+	init_pair(5, COLOR_GREEN, COLOR_BLACK);
+	init_pair(6, COLOR_RED, COLOR_BLACK);
+}
+void setDelay(int delay)
+{
+  cbreak();
+	halfdelay(delay);
+}
+WINDOW *initWindow(int winSizeY, int winSizeX, int y, int x)
+{
+  return newwin(winSizeY, winSizeX, y, x);
+}
+void delWindow(WINDOW *win)
+{
+  delwin(win);
+}
+void endDisplay()
+{
+  endwin();
+}
 void printMap(map *gameMap, robot *list[ROBOTSLIMIT], WINDOW *mainWin, int px, int py, int sizeX, int sizeY, WINDOW *statsWin)
 {
     wclear(mainWin);

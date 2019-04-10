@@ -10,3 +10,6 @@ OBJ = main.o interpreter.o commands.o map.o display.o
 
 main: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
+
+clean:
+	rm *.o

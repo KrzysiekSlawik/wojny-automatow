@@ -11,19 +11,9 @@
 #define TIMEOUT 100
 int main()
 {
-	//ncurses initialization
-	initscr();
-	keypad(stdscr, TRUE);
-	noecho();
+	initDisplay();
 	int delay = 5;
-	halfdelay(delay);
-	start_color();
-	init_pair(1, COLOR_GREEN, COLOR_GREEN);
-	init_pair(2, COLOR_RED, COLOR_RED);
-	init_pair(3, COLOR_YELLOW, COLOR_BLACK);
-	init_pair(4, COLOR_WHITE, COLOR_BLACK);
-	init_pair(5, COLOR_GREEN, COLOR_BLACK);
-	init_pair(6, COLOR_RED, COLOR_BLACK);
+	setDelay(delay);
 	WINDOW *mainWin;
 	WINDOW *statsWin;
 	int winSizeX;
@@ -44,8 +34,8 @@ int main()
 	{
 		winSizeX -= 15;
 	}
-	mainWin = newwin(winSizeY, winSizeX, 0, 0);
-	statsWin = newwin(winSizeY, 15, 0, winSizeX + 1);
+	mainWin = initWindow(winSizeY, winSizeX, 0, 0);
+	statsWin = initWindow(winSizeY, 15, 0, winSizeX + 1);
 	robot *list[ROBOTSLIMIT];
 	for(int i = 0; i<ROBOTSLIMIT; i++)
 	{
@@ -94,14 +84,12 @@ int main()
 				if(delay > 1)
 				{
 					delay--;
-					cbreak();
-					halfdelay(delay);
+					setDelay(delay);
 				}
 				break;
 			case 'l':
 				delay++;
-				cbreak();
-				halfdelay(delay);
+				setDelay(delay);
 				break;
 			case 'q':
 				state = 3;
@@ -126,8 +114,9 @@ int main()
 		free(list[i]->path);
 		free(list[i]);
 	}
-	delwin(mainWin);
-	endwin();//end ncurses
+	delWindow(statsWin);
+	delWindow(mainWin);
+	endDisplay();
 	if(state == 1)
 	{
 		printf("\ngreen won\n");
